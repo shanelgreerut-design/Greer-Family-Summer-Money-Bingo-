@@ -1,0 +1,2744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Summer Money Bingo — James Greer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:        #f5f7fa;
+  --surface:   #ffffff;
+  --border:    #e8ecf2;
+  --border-md: #d1d9e6;
+  --text-1:    #111827;
+  --text-2:    #374151;
+  --text-3:    #6b7280;
+  --text-4:    #9ca3af;
+
+  --blue:      #2563eb;
+  --blue-lt:   #eff4ff;
+  --blue-md:   #bfdbfe;
+  --teal:      #0d9488;
+  --teal-lt:   #f0fdfa;
+  --teal-md:   #99f6e4;
+  --amber:     #d97706;
+  --amber-lt:  #fffbeb;
+  --amber-md:  #fde68a;
+  --rose:      #e11d48;
+  --rose-lt:   #fff1f2;
+  --violet:    #7c3aed;
+  --violet-lt: #f5f3ff;
+  --orange:    #ea580c;
+  --orange-lt: #fff7ed;
+  --slate:     #475569;
+  --slate-lt:  #f8fafc;
+
+  --green:     #16a34a;
+  --green-lt:  #f0fdf4;
+  --green-md:  #bbf7d0;
+
+  --radius-sm: 8px;
+  --radius:    12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow:    0 4px 12px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.05);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,.10), 0 4px 8px rgba(0,0,0,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{overflow-x:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);min-height:100vh;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--border-md);border-radius:4px;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.92);}to{opacity:1;transform:scale(1);}}
+@keyframes strikeIn{from{stroke-dashoffset:80;}to{stroke-dashoffset:0;}}
+
+/* ── HEADER ── */
+.site-header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:24px 32px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(12px);
+}
+.header-left{display:flex;align-items:center;gap:14px;}
+.header-icon{
+  width:42px;height:42px;border-radius:11px;
+  background:linear-gradient(135deg,#2563eb,#0d9488);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.header-title{font-family:'Sora',sans-serif;font-size:1.15rem;font-weight:700;color:var(--text-1);letter-spacing:-.02em;}
+.header-sub{font-size:.75rem;font-weight:500;color:var(--text-3);margin-top:1px;letter-spacing:.04em;text-transform:uppercase;}
+.header-right{display:flex;align-items:center;gap:12px;}
+.payout-chip{
+  display:flex;align-items:center;gap:8px;
+  background:var(--blue-lt);border:1px solid var(--blue-md);
+  border-radius:30px;padding:6px 14px;
+}
+.payout-chip .label{font-size:.75rem;font-weight:600;color:var(--blue);text-transform:uppercase;letter-spacing:.04em;}
+.payout-chip .amount{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;color:var(--blue);}
+.progress-track{
+  width:110px;height:6px;background:var(--blue-md);border-radius:6px;overflow:hidden;
+}
+.progress-fill{height:100%;background:var(--blue);border-radius:6px;transition:width .4s ease;}
+.reset-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:var(--surface);
+  font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;
+  color:var(--text-3);cursor:pointer;transition:all .15s ease;
+}
+.reset-btn:hover{border-color:var(--border-md);color:var(--text-2);background:var(--bg);}
+.submit-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 16px;border-radius:var(--radius-sm);
+  border:none;background:var(--blue);
+  font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:700;
+  color:#fff;cursor:pointer;transition:all .15s ease;
+}
+.submit-btn:hover{background:#1d4ed8;}
+
+/* ── SUBMIT MODAL ── */
+.submit-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.5);
+  backdrop-filter:blur(6px);
+  z-index:300;
+  display:flex;align-items:center;justify-content:center;
+}
+.submit-sheet{
+  background:var(--surface);
+  border-radius:20px;
+  width:92%;max-width:520px;
+  max-height:90vh;overflow-y:auto;
+  box-shadow:0 24px 60px rgba(0,0,0,.2);
+}
+.submit-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px 16px;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--surface);z-index:1;
+  border-radius:20px 20px 0 0;
+}
+.submit-header-title{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;color:var(--text-1);}
+.submit-close{
+  background:none;border:none;cursor:pointer;
+  font-size:.85rem;font-weight:600;color:var(--text-3);
+  font-family:'DM Sans',sans-serif;padding:4px 8px;border-radius:6px;
+}
+.submit-close:hover{color:var(--rose);background:var(--rose-lt);}
+.submit-body{padding:20px 24px;}
+.submit-section-label{
+  font-size:.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--text-4);margin-bottom:10px;margin-top:18px;
+}
+.submit-section-label:first-child{margin-top:0;}
+/* Summary table */
+.summary-table{width:100%;border-collapse:collapse;font-size:.82rem;}
+.summary-table th{
+  text-align:left;padding:8px 10px;
+  font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--text-4);border-bottom:1px solid var(--border);
+}
+.summary-table td{
+  padding:9px 10px;border-bottom:1px solid var(--bg);
+  color:var(--text-2);vertical-align:top;
+}
+.summary-table tr:last-child td{border-bottom:none;}
+.summary-table td:first-child{font-weight:600;color:var(--text-1);}
+.summary-cat{
+  display:inline-block;font-size:.68rem;font-weight:700;
+  padding:2px 7px;border-radius:4px;white-space:nowrap;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+.summary-log{font-size:.75rem;color:var(--text-3);margin-top:2px;}
+.summary-empty{
+  text-align:center;padding:28px;color:var(--text-4);
+  font-size:.85rem;font-style:italic;
+}
+.payout-amount{
+  font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;
+  color:var(--blue);text-align:center;padding:12px 0 4px;
+}
+.payout-note{font-size:.78rem;color:var(--text-3);text-align:center;margin-bottom:14px;}
+/* Payment method buttons */
+.payment-opts{display:flex;gap:10px;flex-wrap:wrap;}
+.payment-opt{
+  flex:1;min-width:100px;
+  padding:12px 8px;border-radius:10px;
+  border:2px solid var(--border);background:var(--bg);
+  cursor:pointer;text-align:center;transition:all .15s ease;
+  font-family:'DM Sans',sans-serif;
+}
+.payment-opt:hover{border-color:var(--blue-md);}
+.payment-opt.selected{border-color:var(--blue);background:var(--blue-lt);}
+.payment-opt-icon{display:flex;align-items:center;justify-content:center;height:32px;margin-bottom:6px;}
+.payment-opt-label{font-size:.8rem;font-weight:700;color:var(--text-1);}
+.payment-opt-sub{font-size:.7rem;color:var(--text-3);margin-top:2px;}
+.payment-opt.selected .payment-opt-label{color:var(--blue);}
+/* Email input */
+.submit-input{
+  width:100%;padding:11px 14px;border-radius:var(--radius-sm);
+  border:1.5px solid var(--border);background:var(--bg);
+  font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text-1);
+  outline:none;transition:border-color .15s;
+}
+.submit-input:focus{border-color:var(--blue);}
+/* Send button */
+.submit-send-btn{
+  width:100%;margin-top:18px;padding:14px;
+  border-radius:10px;border:none;
+  background:var(--blue);color:#fff;
+  font-family:'Sora',sans-serif;font-size:.95rem;font-weight:700;
+  cursor:pointer;transition:background .15s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.submit-send-btn:hover{background:#1d4ed8;}
+.submit-send-btn:disabled{background:var(--text-4);cursor:not-allowed;}
+.submit-generating{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:20px;color:var(--text-3);font-size:.85rem;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner{
+  width:18px;height:18px;border:2px solid var(--border-md);
+  border-top-color:var(--blue);border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+.submit-success{
+  text-align:center;padding:28px 20px;
+}
+.submit-success-icon{font-size:2.8rem;margin-bottom:10px;}
+.submit-success-title{
+  font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;
+  color:var(--text-1);margin-bottom:6px;
+}
+.submit-success-sub{font-size:.83rem;color:var(--text-3);line-height:1.55;}
+
+/* ── MANDATORY BAR ── */
+.mandatory-bar{
+  background:var(--amber-lt);border-bottom:1px solid var(--amber-md);
+  padding:10px 32px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.mandatory-bar .mand-title{
+  font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);
+  margin-right:4px;
+}
+.mand-pill{
+  display:flex;align-items:center;gap:5px;
+  background:var(--surface);border:1px solid var(--amber-md);
+  border-radius:20px;padding:3px 10px;font-size:.75rem;font-weight:600;color:var(--text-2);
+  transition:all .2s ease;
+}
+.mand-pill.met{background:var(--green-lt);border-color:var(--green-md);color:var(--green);}
+.mand-dot{width:7px;height:7px;border-radius:50%;background:var(--amber-md);transition:background .2s;}
+.mand-pill.met .mand-dot{background:var(--green);}
+
+/* ── LAYOUT ── */
+.main{max-width:100%;margin:0;padding:28px 24px 60px;}
+
+/* ── OVERALL RULES CARD ── */
+.rules-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:20px 24px;margin-bottom:28px;
+  box-shadow:var(--shadow-sm);
+  animation:fadeUp .4s ease both;
+}
+.rules-card-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.rules-card-title{font-family:'Sora',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-1);}
+.rules-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rule-badge{
+  display:flex;align-items:center;gap:6px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:6px 12px;
+  font-size:.8rem;font-weight:500;color:var(--text-2);
+}
+.rule-badge svg{flex-shrink:0;}
+
+/* ── SECTION ── */
+.section{margin-bottom:36px;animation:fadeUp .4s ease both;}
+.section-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
+.section-icon-wrap{
+  width:36px;height:36px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+}
+.section-meta{}
+.section-title{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text-1);display:flex;align-items:center;gap:8px;}
+.section-rules{font-size:.78rem;font-weight:500;color:var(--text-3);margin-top:3px;line-height:1.5;}
+.badge-mandatory{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  background:var(--rose-lt);color:var(--rose);
+  padding:2px 7px;border-radius:5px;
+}
+.badge-min{
+  font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  background:var(--blue-lt);color:var(--blue);
+  padding:2px 7px;border-radius:5px;display:inline-block;
+}
+.section-rules-box{
+  background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:10px 14px;margin-bottom:14px;font-size:.8rem;font-weight:500;color:var(--text-3);
+  line-height:1.6;display:flex;align-items:flex-start;gap:8px;
+}
+
+/* ── CARD GRID ── */
+.card-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(148px,1fr));
+  gap:10px;
+}
+
+/* ── BINGO CARD ── */
+.bingo-card{
+  position:relative;
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px 12px 14px;
+  cursor:pointer;
+  text-align:left;
+  transition:all .18s ease;
+  box-shadow:var(--shadow-sm);
+  display:flex;flex-direction:column;gap:6px;
+  min-height:120px;
+  overflow:hidden;
+  font-family:'DM Sans',sans-serif;
+}
+.bingo-card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow);
+  border-color:var(--border-md);
+}
+.bingo-card.done{
+  background:var(--green-lt);
+  border-color:var(--green-md);
+}
+.bingo-card.done .card-title{color:var(--green);}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;}
+.card-icon-wrap{
+  width:34px;height:34px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.card-badges{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.card-value{
+  font-family:'Sora',sans-serif;font-size:.8rem;font-weight:700;
+  color:var(--teal);background:var(--teal-lt);
+  padding:2px 7px;border-radius:5px;white-space:nowrap;
+}
+.card-tag{
+  font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+  padding:2px 6px;border-radius:4px;white-space:nowrap;
+}
+.card-tag.mandatory{background:var(--rose-lt);color:var(--rose);}
+.card-tag.sprinter{background:var(--blue-lt);color:var(--blue);}
+.card-title{font-size:.82rem;font-weight:600;color:var(--text-2);line-height:1.3;}
+.card-sub{font-size:.72rem;font-weight:400;color:var(--text-4);line-height:1.3;}
+
+/* ── DONE OVERLAY ── */
+.done-overlay{
+  position:absolute;inset:0;border-radius:calc(var(--radius) - 1px);
+  background:rgba(22,163,74,.06);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .2s ease;pointer-events:none;
+}
+.bingo-card.done .done-overlay{opacity:1;}
+/* Count badge for repeatable tiles */
+.card-count-badge {
+  position: absolute;
+  top: 8px; right: 8px;
+  min-width: 22px; height: 22px;
+  background: var(--teal); color: #fff;
+  border-radius: 11px;
+  font-family: 'Sora', sans-serif;
+  font-size: .72rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 5px;
+  box-shadow: 0 2px 6px rgba(13,148,136,.35);
+  z-index: 5;
+}
+.card-count-minus {
+  position: absolute;
+  bottom: 7px; right: 7px;
+  width: 18px; height: 18px;
+  background: var(--bg); border: 1px solid var(--border-md);
+  border-radius: 50%;
+  font-size: .9rem; font-weight: 700; line-height: 1;
+  color: var(--text-3); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 6; transition: all .12s;
+}
+.card-count-minus:hover { background: var(--rose-lt); border-color: var(--rose); color: var(--rose); }
+.done-check{
+  width:36px;height:36px;
+}
+.done-check circle{stroke:#16a34a;stroke-width:2;fill:rgba(22,163,74,.12);}
+.done-check path{
+  stroke:#16a34a;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:24;stroke-dashoffset:24;
+  transition:stroke-dashoffset .3s ease .1s;
+}
+.bingo-card.done .done-check path{stroke-dashoffset:0;}
+
+/* ── TOOLTIP ── */
+.tooltip{
+  position:absolute;
+  bottom:calc(100% + 10px);
+  left:50%;transform:translateX(-50%);
+  background:#111827;color:#f9fafb;
+  font-size:.75rem;font-weight:400;line-height:1.55;
+  padding:10px 13px;border-radius:9px;
+  width:240px;z-index:200;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  pointer-events:none;
+  opacity:0;visibility:hidden;
+  transition:opacity .15s ease, visibility .15s ease;
+  text-align:left;
+}
+.tooltip::after{
+  content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:7px solid transparent;border-top-color:#111827;
+}
+.bingo-card:hover .tooltip{opacity:1;visibility:visible;}
+.tooltip-title{font-family:'Sora',sans-serif;font-size:.78rem;font-weight:700;color:#f9fafb;margin-bottom:6px;}
+.tooltip ul{padding-left:14px;margin-top:3px;}
+.tooltip li{margin-bottom:2px;color:#d1d5db;}
+.tooltip strong{color:#f9fafb;}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--border);margin:4px 0 32px;}
+
+/* ── PRINT ── */
+@media print{
+  .site-header,.mandatory-bar,.reset-btn,.tooltip,.progress-track{display:none!important;}
+  .bingo-card{break-inside:avoid;}
+  body{background:#fff;}
+}
+
+/* ── MOBILE ── */
+@media(max-width:640px){
+  .site-header{padding:16px 16px 14px;flex-wrap:wrap;gap:10px;}
+  .main{padding:20px 12px 48px;}
+  .card-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;}
+  .payout-chip .label,.progress-track{display:none;}
+  .mandatory-bar{padding:10px 16px;}
+}
+/* ── DASHBOARD ── */
+.dashboard-wrap {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 24px 24px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.dash-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: var(--shadow-sm);
+  animation: fadeUp .4s ease both;
+}
+.dash-ring-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.dash-ring {
+  width: 100px;
+  height: 100px;
+  display: block;
+}
+.dash-ring-bg {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 9;
+}
+.dash-ring-fill {
+  fill: none;
+  stroke-width: 9;
+  stroke-linecap: round;
+  transition: stroke-dasharray .6s cubic-bezier(.4,0,.2,1);
+}
+.dash-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+.dash-value {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-1);
+  line-height: 1;
+}
+.dash-label {
+  font-size: .65rem;
+  font-weight: 600;
+  color: var(--text-4);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.dash-info {
+  flex: 1;
+  min-width: 0;
+}
+.dash-title {
+  font-family: 'Sora', sans-serif;
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--text-1);
+  margin-bottom: 4px;
+}
+.dash-sub {
+  font-size: .78rem;
+  color: var(--text-3);
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.dash-pct-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dash-pct-bar-bg {
+  flex: 1;
+  height: 6px;
+  background: var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.dash-pct-bar {
+  height: 100%;
+  border-radius: 6px;
+  transition: width .5s ease;
+}
+.dash-pct-num {
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--text-3);
+  min-width: 32px;
+  text-align: right;
+}
+@media(max-width: 640px) {
+  .dashboard-wrap { grid-template-columns: 1fr; padding: 16px 12px 0; }
+  .dash-ring { width: 80px; height: 80px; }
+  .dash-value { font-size: 1rem; }
+}
+/* ── LAYOUT WRAPPER (card grid + detail panel side by side) ── */
+.app-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.cards-col {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── DETAIL PANEL ── */
+.detail-panel {
+  width: 300px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  min-height: calc(100vh - 72px);
+  position: sticky;
+  top: 72px;
+  overflow-y: auto;
+  padding: 24px 20px;
+  transition: border-color .3s ease;
+}
+.detail-panel.flash {
+  border-left-color: var(--blue);
+  animation: panelFlash .5s ease forwards;
+}
+@keyframes panelFlash {
+  0%   { background: var(--blue-lt); border-left-color: var(--blue); }
+  100% { background: var(--surface); border-left-color: var(--border); }
+}
+#detail-content {
+  animation: none;
+}
+#detail-content.updated {
+  animation: contentSlide .25s ease;
+}
+@keyframes contentSlide {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes tilePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(37,99,235,.4); }
+  60%  { box-shadow: 0 0 0 8px rgba(37,99,235,0); }
+  100% { box-shadow: var(--shadow-sm); }
+}
+.bingo-card.selected-tile {
+  border-color: var(--blue) !important;
+  animation: tilePulse .5s ease forwards;
+}
+.detail-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 280px;
+  color: var(--text-4);
+  text-align: center;
+  gap: 10px;
+}
+.detail-empty-icon {
+  width: 48px; height: 48px;
+  background: var(--bg);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.detail-empty p { font-size: .82rem; font-weight: 500; }
+.detail-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+}
+.detail-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.detail-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1rem; font-weight: 700; color: var(--text-1); line-height: 1.25;
+}
+.detail-value {
+  font-size: .78rem; font-weight: 600; color: var(--teal); margin-top: 2px;
+}
+.detail-divider { height: 1px; background: var(--border); margin: 14px 0; }
+.detail-section-label {
+  font-size: .68rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--text-4); margin-bottom: 8px;
+}
+.detail-body {
+  font-size: .82rem; font-weight: 400; color: var(--text-2); line-height: 1.65;
+}
+.detail-body ul { padding-left: 16px; }
+.detail-body li { margin-bottom: 3px; }
+.detail-body strong { color: var(--text-1); font-weight: 600; }
+.detail-log-row {
+  margin-top: 14px; background: var(--bg); border-radius: var(--radius-sm);
+  padding: 10px 12px; font-size: .78rem; color: var(--text-3);
+  border: 1px solid var(--border);
+}
+.detail-log-row .log-label { font-weight: 600; color: var(--text-2); font-size: .8rem; margin-bottom: 2px; }
+.detail-status {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: .75rem; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+  margin-bottom: 12px;
+}
+.detail-status.done { background: var(--green-lt); color: var(--green); }
+.detail-status.pending { background: var(--bg); color: var(--text-3); border: 1px solid var(--border); }
+.detail-complete-btn {
+  width: 100%; margin-top: 14px;
+  padding: 10px 16px; border-radius: var(--radius-sm);
+  border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: .85rem; font-weight: 700;
+  transition: all .15s ease;
+}
+.detail-complete-btn.mark {
+  background: var(--blue); color: #fff;
+}
+.detail-complete-btn.mark:hover { background: #1d4ed8; }
+.detail-complete-btn.unmark {
+  background: var(--bg); color: var(--text-3);
+  border: 1px solid var(--border);
+}
+.detail-complete-btn.unmark:hover { border-color: var(--rose); color: var(--rose); }
+
+/* ── DATE/TIME MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-sheet {
+  background: var(--surface);
+  border-radius: 20px;
+  width: 92%; max-width: 420px;
+  box-shadow: 0 24px 60px rgba(0,0,0,.2);
+  overflow: hidden;
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-title { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-1); }
+.modal-cancel {
+  background: none; border: none; cursor: pointer;
+  font-size: .85rem; font-weight: 600; color: var(--text-3);
+  font-family: 'DM Sans', sans-serif; padding: 4px 8px; border-radius: 6px;
+}
+.modal-cancel:hover { color: var(--rose); background: var(--rose-lt); }
+.modal-body { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.modal-row-label {
+  font-size: .7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--text-4); margin-bottom: 8px;
+}
+.picker-row { display: flex; gap: 8px; align-items: center; }
+.picker-cell {
+  flex: 1; background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center;
+}
+.picker-cell-label {
+  font-size: .65rem; font-weight: 600; color: var(--text-4);
+  text-transform: uppercase; letter-spacing: .05em;
+  padding: 6px 0 2px;
+}
+.picker-btn {
+  width: 100%; border: none; background: transparent;
+  cursor: pointer; padding: 6px 0; font-size: 1.1rem;
+  color: var(--text-3); line-height: 1;
+  transition: background .12s, color .12s;
+}
+.picker-btn:hover { background: var(--border); color: var(--text-1); }
+.picker-btn:active { background: var(--blue-lt); }
+.picker-value {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.3rem; font-weight: 800;
+  color: var(--blue);
+  padding: 10px 0;
+  min-width: 100%; text-align: center;
+  background: var(--blue-lt);
+  border-top: 1.5px solid var(--blue-md);
+  border-bottom: 1.5px solid var(--blue-md);
+  letter-spacing: -.01em;
+}
+.modal-confirm-btn {
+  margin: 0 20px 20px;
+  width: calc(100% - 40px);
+  padding: 14px; border-radius: 10px;
+  border: none; background: var(--blue); color: #fff;
+  font-family: 'Sora', sans-serif; font-size: .95rem; font-weight: 700;
+  cursor: pointer; transition: background .15s; display: flex;
+  align-items: center; justify-content: center; gap: 8px;
+}
+.modal-confirm-btn:hover { background: #1d4ed8; }
+.picker-sep { font-size: 1.2rem; font-weight: 700; color: var(--text-3); flex-shrink: 0; }
+
+/* ── USER SWITCHER ── */
+.user-switcher { position: relative; }
+.user-switcher-btn {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 10px 5px 5px;
+  border: 1.5px solid var(--border); border-radius: 30px;
+  background: var(--surface); cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: .82rem; font-weight: 600;
+  color: var(--text-2); transition: all .15s ease;
+}
+.user-switcher-btn:hover { border-color: var(--blue); color: var(--blue); }
+.user-avatar {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--blue);
+  color: #fff; font-family: 'Sora', sans-serif;
+  font-size: .72rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.user-menu {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; box-shadow: var(--shadow-lg);
+  min-width: 180px; z-index: 100; overflow: hidden;
+  animation: fadeUp .15s ease;
+}
+.user-menu-label {
+  font-size: .68rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--text-4);
+  padding: 10px 14px 6px;
+}
+.user-menu-item {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; border: none; background: transparent;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  text-align: left; transition: background .12s;
+}
+.user-menu-item:hover { background: var(--bg); }
+.user-menu-item.active { background: var(--blue-lt); }
+.user-menu-name { font-size: .85rem; font-weight: 600; color: var(--text-1); }
+
+@media(max-width:900px){
+  .detail-panel{ display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-left">
+    <div class="header-icon" id="header-icon-wrap">
+      <span id="header-initial" style="font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;line-height:1;">J</span>
+    </div>
+    <div>
+      <div class="header-title">Summer Money Bingo</div>
+      <div class="header-sub" id="header-sub">James Greer · Max $700</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <!-- USER SWITCHER -->
+    <div class="user-switcher" id="user-switcher-wrap">
+      <button class="user-switcher-btn" onclick="toggleUserMenu(event)">
+        <div class="user-avatar" id="user-avatar-btn">J</div>
+        <span id="user-name-btn">James</span>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="user-menu" id="user-menu" style="display:none;">
+        <div class="user-menu-label">Switch User</div>
+        <button class="user-menu-item" data-user="james" onclick="switchUser('james')">
+          <div class="user-avatar" style="background:#2563eb;">J</div>
+          <div class="user-menu-name">James Greer</div>
+        </button>
+        <button class="user-menu-item" data-user="brigham" onclick="switchUser('brigham')">
+          <div class="user-avatar" style="background:#0d9488;">B</div>
+          <div class="user-menu-name">Brigham Greer</div>
+        </button>
+        <button class="user-menu-item" data-user="grace" onclick="switchUser('grace')">
+          <div class="user-avatar" style="background:#7c3aed;">G</div>
+          <div class="user-menu-name">Grace Greer</div>
+        </button>
+      </div>
+    </div>
+    <button class="submit-btn" onclick="openSubmitModal()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+      Submit Card
+    </button>
+    <button class="reset-btn" onclick="resetAll()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8M21 3v5h-5M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16M3 21v-5h5"/></svg>
+      Reset Week
+    </button>
+  </div>
+</header>
+
+<!-- MANDATORY BAR -->
+<!-- DASHBOARD -->
+<div class="dashboard-wrap">
+  <div class="dash-card">
+    <div class="dash-ring-wrap">
+      <svg class="dash-ring" viewBox="0 0 120 120">
+        <circle class="dash-ring-bg" cx="60" cy="60" r="48"/>
+        <circle class="dash-ring-fill" id="ring-payout" cx="60" cy="60" r="48"
+          stroke="#2563eb"
+          stroke-dasharray="0 301.59"
+          transform="rotate(-90 60 60)"/>
+      </svg>
+      <div class="dash-ring-center">
+        <div class="dash-value" id="dash-payout-val">$0</div>
+        <div class="dash-label" id="dash-payout-label">of $50</div>
+      </div>
+    </div>
+    <div class="dash-info">
+      <div class="dash-title">Weekly Earnings</div>
+      <div class="dash-sub" id="dash-payout-sub">$0 earned this week</div>
+      <div class="dash-pct-row">
+        <div class="dash-pct-bar-bg"><div class="dash-pct-bar" id="dash-payout-bar" style="background:#2563eb;width:0%"></div></div>
+        <span class="dash-pct-num" id="dash-payout-pct">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-card">
+    <div class="dash-ring-wrap">
+      <svg class="dash-ring" viewBox="0 0 120 120">
+        <circle class="dash-ring-bg" cx="60" cy="60" r="48"/>
+        <circle class="dash-ring-fill" id="ring-required" cx="60" cy="60" r="48"
+          stroke="#0d9488"
+          stroke-dasharray="0 301.59"
+          transform="rotate(-90 60 60)"/>
+      </svg>
+      <div class="dash-ring-center">
+        <div class="dash-value" id="dash-req-val">0%</div>
+        <div class="dash-label">complete</div>
+      </div>
+    </div>
+    <div class="dash-info">
+      <div class="dash-title">Required Activities</div>
+      <div class="dash-sub" id="dash-req-sub">0 of 4 requirements met</div>
+      <div class="dash-pct-row">
+        <div class="dash-pct-bar-bg"><div class="dash-pct-bar" id="dash-req-bar" style="background:#0d9488;width:0%"></div></div>
+        <span class="dash-pct-num" id="dash-req-pct">0%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP BODY -->
+<div class="app-body">
+<div class="cards-col">
+
+<div class="main">
+
+  <!-- OVERALL RULES -->
+  <div class="rules-card" style="animation-delay:.05s">
+    <div class="rules-card-header">
+      <div style="width:28px;height:28px;background:var(--blue-lt);border-radius:7px;display:flex;align-items:center;justify-content:center;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <span class="rules-card-title">Overall Rules</span>
+    </div>
+    <div class="rules-grid">
+      <div class="rule-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Max weekly payout: <strong id="rule-weekly-max">$50</strong></div>
+      <div class="rule-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Must complete all mandatory items + minimums</div>
+      <div class="rule-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Total maximum: <strong id="rule-total-max">$700</strong></div>
+      <div class="rule-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Turn in card on <strong>Mondays</strong></div>
+      <div class="rule-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Pay via Venmo · Vanguard · 50/50 Split</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       LIFTING
+  ══════════════════════════════════════ -->
+  <div class="section" id="section-lifting" style="animation-delay:.08s">
+    <div class="section-header">
+      <div class="section-icon-wrap" style="background:#fef2f2;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14"/><path d="M4 7.5v9M20 7.5v9"/><path d="M2 9v6M22 9v6"/><line x1="6" y1="12" x2="18" y2="12"/></svg>
+      </div>
+      <div class="section-meta">
+        <div class="section-title" style="color:#be123c;">
+          Lifting
+          <span class="badge-min">3× / week min — No Max</span>
+        </div>
+        <div class="section-rules">No more than 1 per day &nbsp;·&nbsp; Minimum 2 Sprinter's Workouts per week</div>
+      </div>
+    </div>
+    <div class="card-grid">
+
+      <div class="bingo-card" data-id="lift-s1" data-value="5" data-section="lifting" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fef2f2;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="card-badges">
+            <span class="card-value">$5</span>
+          </div>
+        </div>
+        <div class="card-title">Sprinter's Lift 1</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip">
+          <div class="tooltip-title">⚡ Sprinter's Lift 1</div>
+          <ul>
+            <li>Trap Bar Deadlift — 6×3 (heavy, explosive)</li>
+            <li>Bulgarian Split Squat — 4×5 each leg</li>
+            <li>Romanian Deadlift — 4×5 (slow down, fast up)</li>
+            <li>Nordic Hamstring Curl — 3×5</li>
+            <li>Pull-Ups — 4×5</li>
+            <li>Heavy Carries — 3 rounds</li>
+            <li>Abs</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bingo-card" data-id="lift-s2" data-value="5" data-section="lifting" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fef2f2;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="card-badges">
+            <span class="card-value">$5</span>
+          </div>
+        </div>
+        <div class="card-title">Sprinter's Lift 2</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip">
+          <div class="tooltip-title">⚡ Sprinter's Lift 2</div>
+          <ul>
+            <li>Hang Power Clean — 6×2 (explosive intent)</li>
+            <li>Back Squat — 5×3 (heavy but FAST)</li>
+            <li>Barbell Hip Thrust — 4×6 (explosive lockout)</li>
+            <li>Bench / Push Press — 4×4</li>
+            <li>Standing Calf Raise — 3×8</li>
+            <li>Tibialis Raises — 3×15</li>
+            <li>Sled Pushes — 4×15–20m (pure power)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bingo-card" data-id="lift-home" data-value="5" data-section="lifting" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fef2f2;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">In-Home All Around</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip">
+          <div class="tooltip-title">🏠 In-Home All Around</div>
+          <ul>
+            <li>DB Bench Press — 4×6–10</li>
+            <li>One-Arm DB Row — 4×8–12 each arm</li>
+            <li>DB Shoulder Press — 4×8–10</li>
+            <li>Push-Ups — 3×10–15</li>
+            <li>Sit-Ups / Ab Roller — 3×10–15</li>
+            <li>DB Hammer Curl — 3×10–12</li>
+            <li>Dips / Overhead DB Tricep Ext — 3×10–12</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bingo-card" data-id="lift-gym" data-value="5" data-section="lifting" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fef2f2;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5h11M6.5 17.5h11M3 10h18M3 14h18"/><circle cx="6.5" cy="12" r="2"/><circle cx="17.5" cy="12" r="2"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">Gym Upper Body</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip">
+          <div class="tooltip-title">💪 Gym Upper Body</div>
+          <ul>
+            <li>Chest Press Machine — 4×6–10</li>
+            <li>Seated Cable Row — 4×8–12</li>
+            <li>Lat Pulldown — 4×8–12</li>
+            <li>Shoulder Press Machine — 3×8–10</li>
+            <li>Pec Deck OR Rear Delt Fly — 3×12–15</li>
+            <li>Curls — 3×10–12</li>
+            <li>Rope Tricep Pushdown — 3×10–12</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="divider" id="divider-lifting"></div>
+
+  <!-- ══════════════════════════════════════
+       SPRINTING
+  ══════════════════════════════════════ -->
+  <div class="section" id="section-sprint" style="animation-delay:.11s">
+    <div class="section-header">
+      <div class="section-icon-wrap" style="background:#fff7ed;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17c0 2 1.5 3 3.5 3h7c1.5 0 2.5-.8 2.5-2s-1-2-2.5-2H9"/><path d="M9 17V12c0-1 .5-2 1.5-2.5"/><path d="M10.5 9.5 C8 7 5 8 4 10.5"/><path d="M10.5 11 C8 9.5 5 10 4 12"/></svg>
+      </div>
+      <div class="section-meta">
+        <div class="section-title" style="color:#c2410c;">
+          Sprinting Workouts
+          <span class="badge-min">1× / week min — No Max</span>
+        </div>
+        <div class="section-rules">No more than 1 per day</div>
+      </div>
+    </div>
+    <div class="card-grid">
+
+      <div class="bingo-card" data-id="sprint-1" data-value="5" data-section="sprint" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fff7ed;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">Sprint Workout 1</div>
+        <div class="card-sub">Accelerations + Sled</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip">
+          <div class="tooltip-title">Sprint Workout 1</div>
+          <strong>Warm-Up (15 min):</strong>
+          <ul>
+            <li>Leg swings, walking lunges, hip circles, ankle mobility</li>
+            <li>A-skips, B-skips, high knees, butt kicks, bounds</li>
+            <li>4×40m build-ups</li>
+          </ul>
+          <strong>Main:</strong>
+          <ul>
+            <li>Falling Starts — 4×10m (rest 60–90s)</li>
+            <li>20m Accelerations — 5×20m 95–100% (rest 2 min)</li>
+            <li>30m Sprints — 4×30m FULL SPEED (rest 3–4 min)</li>
+            <li>Sled / Hill Sprint — 6×15m (walk back)</li>
+            <li>Broad Jumps 3×5 OR Bounds 3×20m</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bingo-card" data-id="sprint-2" data-value="5" data-section="sprint" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fff7ed;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">Sprint Workout 2</div>
+        <div class="card-sub">Fly 20s + Speed Endurance</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip">
+          <div class="tooltip-title">Sprint Workout 2</div>
+          <strong>Warm-Up (15 min):</strong>
+          <ul>
+            <li>Same as Workout 1 warm-up protocol</li>
+          </ul>
+          <strong>Main:</strong>
+          <ul>
+            <li>Fly 20s — 6 reps (20m buildup → 20m MAX, rest 3–4 min)</li>
+            <li>60m Sprints — 4×60m @ 95–100% (rest 5 min)</li>
+            <li>Speed Endurance: 3×120m OR 4×100m @ 90–95% (rest 5–6 min)</li>
+            <li>Pogos 3×20 + Single-Leg Bounds 2×20m each</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="divider" id="divider-sprint"></div>
+
+  <!-- ══════════════════════════════════════
+       PLYOMETRICS
+  ══════════════════════════════════════ -->
+  <div class="section" id="section-plyo" style="animation-delay:.14s">
+    <div class="section-header">
+      <div class="section-icon-wrap" style="background:#f0fdf4;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </div>
+      <div class="section-meta">
+        <div class="section-title" style="color:#15803d;">
+          Plyometric Workouts
+          <span class="badge-min">1× / week min — No Max</span>
+        </div>
+        <div class="section-rules">No more than 1 per day</div>
+      </div>
+    </div>
+    <div class="card-grid">
+
+      <div class="bingo-card" data-id="plyo-hill" data-value="5" data-section="plyo" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f0fdf4;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 17 9 7 14 13 18 9 21 17"/><polyline points="1 17 23 17"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">Hill Workout</div>
+        <div class="card-sub">3 blocks + cool down</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip">
+          <div class="tooltip-title">⛰️ Hill Workout</div>
+          <strong>Warm-Up (12 min):</strong>
+          <ul><li>Easy jog, dynamic mobility, sprint drills, 3×40m build-ups</li></ul>
+          <strong>Hill Sprints (25 min):</strong>
+          <ul>
+            <li>Block 1: 6×15 sec — arm drive, knee drive. Walk down, 90s rest.</li>
+            <li>Block 2: 4×25 sec — stay tall, relaxed upper body. Walk + 2 min.</li>
+            <li>Block 3: 4×8 sec MAX — pure explosion. Full recovery.</li>
+          </ul>
+          <strong>Cool Down (8 min):</strong>
+          <ul><li>Easy walk/jog, hamstring, hip flexor, calf, glute stretch</li></ul>
+        </div>
+      </div>
+
+      <div class="bingo-card" data-id="plyo-workout" data-value="5" data-section="plyo" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f0fdf4;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">Plyometric Workout</div>
+        <div class="card-sub">Box jumps, bounds, pogos</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip">
+          <div class="tooltip-title">🤸 Plyometric Workout</div>
+          <strong>Warm-Up (10 min):</strong>
+          <ul><li>Jump rope 3 min, dynamic mobility, pogo hops ×20, squat jumps ×5, A-skips ×20m</li></ul>
+          <strong>Reactive Plyo (10 min):</strong>
+          <ul><li>Pogo Jumps 3×20, Jump Rope Speed 3×30s, Single-Leg Pogos 2×10</li></ul>
+          <strong>Power Block (15 min):</strong>
+          <ul><li>Box Jumps 5×3, Broad Jumps 4×4, Depth Drop to VJ 3×5</li></ul>
+          <strong>Finisher (7 min):</strong>
+          <ul><li>Bounds 3×20m, Plyo Sprint Marches 2×20m, Plyo Fast Runs 4×20m</li></ul>
+        </div>
+      </div>
+
+      <div class="bingo-card" data-id="plyo-ghike" data-value="5" data-section="plyo" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f0fdf4;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10a8 8 0 0 1 16 0v10"/><path d="M9 20a3 3 0 0 0 6 0"/><path d="M4 15h2a2 2 0 0 1 2 2v1a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-1a2 2 0 0 1 2-2h2"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">G Hike — Weighted Vest</div>
+        <div class="card-sub">Sub 20 min to the top</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip">
+          <div class="tooltip-title">🎒 G Hike — Weighted Vest</div>
+          <ul><li>Hike with weighted vest</li><li>Goal: under 20 minutes to the top</li></ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="divider" id="divider-plyo"></div>
+
+  <!-- ══════════════════════════════════════
+       PHYSICAL ACTIVITY
+  ══════════════════════════════════════ -->
+  <div class="section" style="animation-delay:.17s">
+    <div class="section-header">
+      <div class="section-icon-wrap" style="background:#eff4ff;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      </div>
+      <div class="section-meta">
+        <div class="section-title" style="color:#1d4ed8;">
+          Physical Activity
+          <span class="badge-min" id="act-badge-min">1× / week · $5 max</span>
+        </div>
+        <div class="section-rules">Max 2 per day &nbsp;·&nbsp; Soccer Practice is mandatory but does not count toward payment</div>
+      </div>
+    </div>
+    <div class="card-grid">
+
+      <div class="bingo-card" data-id="act-soccer" data-value="0" data-section="activity" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-tag mandatory">Required</span></div>
+        </div>
+        <div class="card-title">Soccer Practice</div>
+        <div class="card-sub">Does not count for pay</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">⚽ Soccer Practice</div><ul><li>Mandatory — must attend</li><li>Does not count toward $5 payout</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="act-volleyball" data-value="1" data-section="activity" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">Volleyball</div>
+        <div class="card-sub">1 hour minimum</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🏐 Volleyball</div><ul><li>Minimum <strong>1 hour</strong></li><li>Counts toward $5 physical activity max</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="act-pickleball" data-value="1" data-section="activity" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 3a5.5 5.5 0 0 1 0 7.78L7.27 17 5 14.73l6.22-6.23A5.5 5.5 0 0 1 13.5 3z"/><line x1="5" y1="14.73" x2="3" y2="21"/><circle cx="18.5" cy="18.5" r="1.5"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">Pickleball</div>
+        <div class="card-sub">1 hour minimum</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🏓 Pickleball</div><ul><li>Minimum <strong>1 hour</strong></li><li>Counts toward $5 physical activity max</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="act-bike" data-value="1" data-section="activity" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0-1-1h-3l-3.5 9.5"/><path d="M9.5 14.5L15 6"/><path d="M18.5 14.5L15 6"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">Bike Riding</div>
+        <div class="card-sub">5 miles · includes hill home</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🚴 Bike Riding</div><ul><li>Minimum <strong>5 miles</strong></li><li>Must include the <strong>hill back home</strong></li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="act-hike" data-value="1" data-section="activity" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 17 9 7 14 13 18 9 21 17"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">Hike</div>
+        <div class="card-sub">1 mile minimum</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🥾 Hike</div><ul><li>Minimum <strong>1 mile</strong></li></ul></div>
+      </div>
+
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════
+       MUSIC
+  ══════════════════════════════════════ -->
+  <div class="section" style="animation-delay:.20s">
+    <div class="section-header">
+      <div class="section-icon-wrap" style="background:#f5f3ff;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <div class="section-meta">
+        <div class="section-title" style="color:#6d28d9;">
+          Music
+          <span class="badge-mandatory"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Required</span>
+        </div>
+        <div class="section-rules">Must complete 4 sessions per week &nbsp;·&nbsp; 30-minute sessions &nbsp;·&nbsp; 1 per day max</div>
+      </div>
+    </div>
+    <div class="card-grid">
+
+      <div class="bingo-card" data-id="music-1" data-value="0" data-section="music" data-mandatory="music" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f5f3ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-tag mandatory">Required</span></div>
+        </div>
+        <div class="card-title">Music Session 1</div>
+        <div class="card-sub">30 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🎵 Music Session</div><ul><li>30-minute practice session</li><li>One session per day max</li><li>Need all 4 for payout</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="music-2" data-value="0" data-section="music" data-mandatory="music" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f5f3ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-tag mandatory">Required</span></div>
+        </div>
+        <div class="card-title">Music Session 2</div>
+        <div class="card-sub">30 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🎵 Music Session</div><ul><li>30-minute practice session</li><li>One session per day max</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="music-3" data-value="0" data-section="music" data-mandatory="music" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f5f3ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-tag mandatory">Required</span></div>
+        </div>
+        <div class="card-title">Music Session 3</div>
+        <div class="card-sub">30 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🎵 Music Session</div><ul><li>30-minute practice session</li><li>One session per day max</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="music-4" data-value="0" data-section="music" data-mandatory="music" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f5f3ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-tag mandatory">Required</span></div>
+        </div>
+        <div class="card-title">Music Session 4</div>
+        <div class="card-sub">Unlocks payout!</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🎹 Session 4 — Unlocks Payout!</div><ul><li>30-minute practice session</li><li>Completing all 4 makes music count for payment</li></ul></div>
+      </div>
+
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════
+       CHORES
+  ══════════════════════════════════════ -->
+  <div class="section" style="animation-delay:.23s">
+    <div class="section-header">
+      <div class="section-icon-wrap" style="background:#fff7ed;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/><path d="M13 13l6 6"/></svg>
+      </div>
+      <div class="section-meta">
+        <div class="section-title" style="color:#b45309;">
+          Chores
+          <span class="badge-mandatory"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Required</span>
+        </div>
+        <div class="section-rules">Mandatory for any payment &nbsp;·&nbsp; Must complete all 3 per week for $5 payout</div>
+      </div>
+    </div>
+    <div class="card-grid">
+
+      <div class="bingo-card" data-id="chore-clothes" data-value="0" data-section="chores" data-mandatory="chores" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fff7ed;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-tag mandatory">Required</span></div>
+        </div>
+        <div class="card-title">Clothes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">👕 Clothes</div><ul><li>All clothes dealt with for the week</li><li>All 3 chores needed for $5 payout</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="chore-room" data-value="0" data-section="chores" data-mandatory="chores" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fff7ed;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-tag mandatory">Required</span></div>
+        </div>
+        <div class="card-title">Room</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🛏️ Room</div><ul><li>Room fully cleaned for the week</li><li>All 3 chores needed for $5 payout</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="chore-bathroom" data-value="0" data-section="chores" data-mandatory="chores" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fff7ed;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/><path d="M6 12V5a2 2 0 0 1 2-2h3v2.25"/><line x1="4" y1="20" x2="4" y2="22"/><line x1="20" y1="20" x2="20" y2="22"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-tag mandatory">Required</span></div>
+        </div>
+        <div class="card-title">Bathroom</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🚿 Bathroom</div><ul><li>Bathroom cleaned for the week</li><li>All 3 chores needed for $5 payout</li></ul></div>
+      </div>
+
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════
+       SERVICE
+  ══════════════════════════════════════ -->
+  <div class="section" style="animation-delay:.26s">
+    <div class="section-header">
+      <div class="section-icon-wrap" style="background:#f0fdfa;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="section-meta">
+        <div class="section-title" style="color:#0f766e;">
+          Service
+          <span class="badge-mandatory"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Required</span>
+        </div>
+        <div class="section-rules">1 hour per week minimum &nbsp;·&nbsp; Can be done all in one day &nbsp;·&nbsp; Log at least 1 activity</div>
+      </div>
+    </div>
+    <div class="card-grid">
+
+      <div class="bingo-card" data-id="serv-dishes-clean" data-value="0" data-section="service" data-mandatory="service" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f0fdfa;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8M12 11v11M6 2h12l-2 7a4 4 0 0 1-8 0L6 2z"/></svg>
+          </div>
+        </div>
+        <div class="card-title">Clean Dishes</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🍽️ Clean Dishes</div><ul><li>Counts toward 1 hr/week service requirement</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="serv-dishes-dirty" data-value="0" data-section="service" data-mandatory="service" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f0fdfa;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="13" rx="8" ry="3"/><path d="M4 13v3c0 1.66 3.58 3 8 3s8-1.34 8-3v-3"/><path d="M12 6a3 3 0 0 1 3 3"/><path d="M9 6a3 3 0 0 0-3 3"/><line x1="12" y1="3" x2="12" y2="6"/></svg>
+          </div>
+        </div>
+        <div class="card-title">Dirty Dishes</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🧽 Dirty Dishes</div><ul><li>Counts toward 1 hr/week service requirement</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="serv-laundry" data-value="0" data-section="service" data-mandatory="service" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f0fdfa;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="12" cy="13" r="4"/><circle cx="12" cy="13" r="1"/><line x1="7" y1="7" x2="7.01" y2="7"/><line x1="10" y1="7" x2="10.01" y2="7"/></svg>
+          </div>
+        </div>
+        <div class="card-title">Your Laundry</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">👔 Your Laundry</div><ul><li>Complete your own laundry</li><li>Counts toward 1 hr/week service requirement</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="serv-yard" data-value="0" data-section="service" data-mandatory="service" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f0fdfa;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </div>
+        </div>
+        <div class="card-title">Yard Work</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🌿 Yard Work</div><ul><li>Counts toward 1 hr/week service requirement</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="serv-ward" data-value="0" data-section="service" data-mandatory="service" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f0fdfa;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+          </div>
+        </div>
+        <div class="card-title">Ward / Neighbor</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🏘️ Ward / Neighbor Service</div><ul><li>Serve a ward member or neighbor</li><li>Counts toward 1 hr/week requirement</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="serv-other" data-value="0" data-section="service" data-mandatory="service" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#f0fdfa;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+        </div>
+        <div class="card-title">Other Service</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">✨ Other Service</div><ul><li>Any approved service activity</li><li>Counts toward 1 hr/week requirement</li></ul></div>
+      </div>
+
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════
+       SPIRITUAL
+  ══════════════════════════════════════ -->
+  <div class="section" style="animation-delay:.29s">
+    <div class="section-header">
+      <div class="section-icon-wrap" style="background:#eff4ff;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="section-meta">
+        <div class="section-title" style="color:#1d4ed8;">
+          Spiritual
+          <span class="badge-mandatory"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Required</span>
+        </div>
+        <div class="section-rules">30 minutes per week minimum &nbsp;·&nbsp; Can be done all in one day &nbsp;·&nbsp; Log at least 1 activity</div>
+      </div>
+    </div>
+    <div class="card-grid">
+
+      <div class="bingo-card" data-id="spirit-scripture" data-value="0" data-section="spiritual" data-mandatory="spiritual" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </div>
+        </div>
+        <div class="card-title">Reading Scriptures</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">📖 Reading Scriptures</div><ul><li>Counts toward 30 min/week spiritual requirement</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="spirit-mission" data-value="0" data-section="spiritual" data-mandatory="spiritual" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+        </div>
+        <div class="card-title">Mission Prep</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🌍 Mission Prep</div><ul><li>Counts toward 30 min/week spiritual requirement</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="spirit-cfm" data-value="0" data-section="spiritual" data-mandatory="spiritual" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+        </div>
+        <div class="card-title">Come Follow Me</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">❤️ Come Follow Me</div><ul><li>Counts toward 30 min/week spiritual requirement</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="spirit-conf" data-value="0" data-section="spiritual" data-mandatory="spiritual" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+        </div>
+        <div class="card-title">Conference Talk</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🎙️ Conference Talk</div><ul><li>Watch or read a General Conference talk</li><li>Counts toward 30 min/week spiritual requirement</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="spirit-seminary" data-value="0" data-section="spiritual" data-mandatory="spiritual" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </div>
+        </div>
+        <div class="card-title">Seminary Videos</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🎓 Seminary Videos</div><ul><li>Counts toward 30 min/week spiritual requirement</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="spirit-other" data-value="0" data-section="spiritual" data-mandatory="spiritual" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+        </div>
+        <div class="card-title">Other Spiritual</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🙏 Other Spiritual</div><ul><li>Any approved spiritual activity</li><li>Counts toward 30 min/week requirement</li></ul></div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /cards-col -->
+
+<!-- DETAIL PANEL -->
+<div class="detail-panel" id="detail-panel">
+  <div class="detail-empty" id="detail-empty">
+    <div class="detail-empty-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-4)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </div>
+    <p>Click any tile to see<br/>its details here</p>
+  </div>
+  <div id="detail-content" style="display:none;">
+    <div id="detail-status-badge" class="detail-status pending">Not completed</div>
+    <div class="detail-header">
+      <div class="detail-icon" id="detail-icon"></div>
+      <div>
+        <div class="detail-title" id="detail-title"></div>
+        <div class="detail-value" id="detail-value"></div>
+      </div>
+    </div>
+    <div class="detail-divider"></div>
+    <div class="detail-section-label">Details</div>
+    <div class="detail-body" id="detail-body"></div>
+    <div id="detail-log-row" class="detail-log-row" style="display:none;">
+      <div class="log-label">Logged</div>
+      <div id="detail-log-text"></div>
+    </div>
+    <button class="detail-complete-btn mark" id="detail-btn" onclick="handleDetailBtn()"></button>
+  </div>
+</div>
+
+</div><!-- /app-body -->
+
+<!-- DATE/TIME MODAL -->
+<div class="modal-overlay" id="modal-overlay" style="display:none;" onclick="handleOverlayClick(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">Log Activity</div>
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- DATE -->
+      <div>
+        <div class="modal-row-label">Date</div>
+        <div class="picker-row">
+          <div class="picker-cell">
+            <div class="picker-cell-label">Month</div>
+            <button class="picker-btn" onclick="pickerStep('month',-1)">▲</button>
+            <div class="picker-value" id="pv-month">Jan</div>
+            <button class="picker-btn" onclick="pickerStep('month',1)">▼</button>
+          </div>
+          <div class="picker-cell">
+            <div class="picker-cell-label">Day</div>
+            <button class="picker-btn" onclick="pickerStep('day',-1)">▲</button>
+            <div class="picker-value" id="pv-day">1</div>
+            <button class="picker-btn" onclick="pickerStep('day',1)">▼</button>
+          </div>
+          <div class="picker-cell">
+            <div class="picker-cell-label">Year</div>
+            <button class="picker-btn" onclick="pickerStep('year',-1)">▲</button>
+            <div class="picker-value" id="pv-year">2025</div>
+            <button class="picker-btn" onclick="pickerStep('year',1)">▼</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- START TIME -->
+      <div>
+        <div class="modal-row-label">Start Time</div>
+        <div class="picker-row">
+          <div class="picker-cell">
+            <div class="picker-cell-label">Hour</div>
+            <button class="picker-btn" onclick="pickerStep('sh',-1)">▲</button>
+            <div class="picker-value" id="pv-sh">12</div>
+            <button class="picker-btn" onclick="pickerStep('sh',1)">▼</button>
+          </div>
+          <div class="picker-sep">:</div>
+          <div class="picker-cell">
+            <div class="picker-cell-label">Min</div>
+            <button class="picker-btn" onclick="pickerStep('sm',-1)">▲</button>
+            <div class="picker-value" id="pv-sm">00</div>
+            <button class="picker-btn" onclick="pickerStep('sm',1)">▼</button>
+          </div>
+          <div class="picker-cell" style="max-width:72px;">
+            <div class="picker-cell-label">AM/PM</div>
+            <button class="picker-btn" onclick="pickerToggle('sap')">▲</button>
+            <div class="picker-value" id="pv-sap">AM</div>
+            <button class="picker-btn" onclick="pickerToggle('sap')">▼</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- END TIME -->
+      <div>
+        <div class="modal-row-label">End Time</div>
+        <div class="picker-row">
+          <div class="picker-cell">
+            <div class="picker-cell-label">Hour</div>
+            <button class="picker-btn" onclick="pickerStep('eh',-1)">▲</button>
+            <div class="picker-value" id="pv-eh">1</div>
+            <button class="picker-btn" onclick="pickerStep('eh',1)">▼</button>
+          </div>
+          <div class="picker-sep">:</div>
+          <div class="picker-cell">
+            <div class="picker-cell-label">Min</div>
+            <button class="picker-btn" onclick="pickerStep('em',-1)">▲</button>
+            <div class="picker-value" id="pv-em">00</div>
+            <button class="picker-btn" onclick="pickerStep('em',1)">▼</button>
+          </div>
+          <div class="picker-cell" style="max-width:72px;">
+            <div class="picker-cell-label">AM/PM</div>
+            <button class="picker-btn" onclick="pickerToggle('eap')">▲</button>
+            <div class="picker-value" id="pv-eap">AM</div>
+            <button class="picker-btn" onclick="pickerToggle('eap')">▼</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <button class="modal-confirm-btn" onclick="confirmLog()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Log Activity
+    </button>
+  </div>
+</div>
+
+<!-- SUBMIT CARD MODAL -->
+<div class="submit-overlay" id="submit-overlay" style="display:none;" onclick="handleSubmitOverlay(event)">
+  <div class="submit-sheet" onclick="event.stopPropagation()">
+    <div class="submit-header">
+      <div class="submit-header-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+        Submit Card
+      </div>
+      <button class="submit-close" onclick="closeSubmitModal()">Cancel</button>
+    </div>
+    <div class="submit-body" id="submit-body">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<script>
+const USERS = {
+  james:   { name: 'James Greer',   initial: 'J', color: '#2563eb', key: 'smb_james_2025_v2',   maxTotal: 700, maxWeekly: 50 },
+  brigham: { name: 'Brigham Greer', initial: 'B', color: '#0d9488', key: 'smb_brigham_2025_v2', maxTotal: 500, maxWeekly: 40 },
+  grace:   { name: 'Grace Greer',   initial: 'G', color: '#7c3aed', key: 'smb_grace_2025_v2',   maxTotal: 200, maxWeekly: 20 },
+};
+
+let currentUser = localStorage.getItem('smb_active_user') || 'james';
+let STORAGE_KEY  = USERS[currentUser].key;
+
+function applyUser(userId) {
+  const u = USERS[userId];
+  if (!u) return;
+  currentUser = userId;
+  STORAGE_KEY = u.key;
+  localStorage.setItem('smb_active_user', userId);
+
+  // Update header
+  document.getElementById('header-initial').textContent = u.initial;
+  document.getElementById('header-icon-wrap').style.background = `linear-gradient(135deg, ${u.color}, #0d9488)`;
+  document.getElementById('header-sub').textContent = u.name + ' · Max $' + u.maxTotal;
+  document.getElementById('user-avatar-btn').textContent = u.initial;
+  document.getElementById('user-avatar-btn').style.background = u.color;
+  document.getElementById('user-name-btn').textContent = u.name.split(' ')[0];
+  // Update rules card total and weekly max
+  const ruleTotal = document.getElementById('rule-total-max');
+  if (ruleTotal) ruleTotal.textContent = '$' + u.maxTotal;
+  const ruleWeekly = document.getElementById('rule-weekly-max');
+  if (ruleWeekly) ruleWeekly.textContent = '$' + u.maxWeekly;
+  // Update dashboard ring label
+  const dashLabel = document.getElementById('dash-payout-label');
+  if (dashLabel) dashLabel.textContent = 'of $' + u.maxWeekly;
+
+  // Mark active in menu
+  document.querySelectorAll('.user-menu-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.user === userId);
+  });
+
+  // Swap user-specific card content
+  applyUserCards(userId);
+}
+
+function toggleUserMenu(e) {
+  e.stopPropagation();
+  const menu = document.getElementById('user-menu');
+  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+
+function switchUser(userId) {
+  document.getElementById('user-menu').style.display = 'none';
+  if (userId === currentUser) return;
+
+  applyUser(userId);
+
+  // Reset UI fully for new user
+  document.querySelectorAll('.bingo-card').forEach(c => {
+    c.classList.remove('done', 'selected-tile');
+    const badge = c.querySelector('.card-count-badge');
+    const minus = c.querySelector('.card-count-minus');
+    if (badge) badge.remove();
+    if (minus) minus.remove();
+  });
+  activeCardId = null;
+  pendingCardEl = null;
+  document.getElementById('detail-empty').style.display = 'flex';
+  document.getElementById('detail-content').style.display = 'none';
+
+  restoreState();
+  updateAll();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', () => {
+  const menu = document.getElementById('user-menu');
+  if (menu) menu.style.display = 'none';
+});
+
+// ── CARD DETAIL DATA ──
+const CARD_DATA = {
+  'lift-s1':     { title: "Sprinter's Lift 1", value: "$5", color: "#e11d48", bg: "#fef2f2", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14"/><path d="M4 7.5v9M20 7.5v9"/><path d="M2 9v6M22 9v6"/><line x1="6" y1="12" x2="18" y2="12"/></svg>', detail: '<ul><li>Trap Bar Deadlift — 6×3 (heavy, explosive, full recovery)</li><li>Bulgarian Split Squat — 4×5 each leg (heavy and controlled)</li><li>Romanian Deadlift — 4×5 (slow down, fast up)</li><li>Nordic Hamstring Curl — 3×5</li><li>Pull-Ups — 4×5 (heavy)</li><li>Heavy Carries — 3 rounds</li><li>Abs</li></ul>' },
+  'lift-s2':     { title: "Sprinter's Lift 2", value: "$5", color: "#e11d48", bg: "#fef2f2", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14"/><path d="M4 7.5v9M20 7.5v9"/><path d="M2 9v6M22 9v6"/><line x1="6" y1="12" x2="18" y2="12"/></svg>', detail: '<ul><li>Hang Power Clean — 6×2 (explosive intent)</li><li>Back Squat — 5×3 (heavy but FAST, never grind)</li><li>Barbell Hip Thrust — 4×6 (explosive lockout)</li><li>Bench Press or Push Press — 4×4</li><li>Standing Calf Raise — 3×8</li><li>Tibialis Raises — 3×15</li><li>Sled Pushes — 4×15–20m (pure power)</li></ul>' },
+  'lift-home':   { title: "In-Home All Around", value: "$5", color: "#e11d48", bg: "#fef2f2", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', detail: '<ul><li>DB Bench Press — 4×6–10</li><li>One-Arm DB Row — 4×8–12 each arm</li><li>DB Shoulder Press — 4×8–10</li><li>Push-Ups — 3×10–15</li><li>Sit-Ups / Ab Roller — 3×10–15</li><li>DB Hammer Curl — 3×10–12</li><li>Dips / Overhead DB Tricep Extension — 3×10–12</li></ul>' },
+  'lift-gym':    { title: "Gym Upper Body", value: "$5", color: "#e11d48", bg: "#fef2f2", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14"/><path d="M4 7.5v9M20 7.5v9"/><path d="M2 9v6M22 9v6"/><line x1="6" y1="12" x2="18" y2="12"/></svg>', detail: '<ul><li>Chest Press Machine — 4×6–10</li><li>Seated Cable Row — 4×8–12</li><li>Lat Pulldown — 4×8–12</li><li>Shoulder Press Machine — 3×8–10</li><li>Pec Deck OR Rear Delt Fly — 3×12–15</li><li>Curls — 3×10–12</li><li>Rope Tricep Pushdown — 3×10–12</li></ul>' },
+  'sprint-1':    { title: "Sprint Workout 1", value: "$5", color: "#ea580c", bg: "#fff7ed", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', detail: '<strong>Warm-Up (15 min):</strong><ul><li>Leg swings, walking lunges, hip circles, ankle mobility</li><li>A-skips, B-skips, high knees, butt kicks, bounds</li><li>4×40m build-ups gradually faster</li></ul><strong>Main Workout:</strong><ul><li>Falling Starts — 4×10m · Rest 60–90s</li><li>20m Accelerations — 5×20m @ 95–100% · Rest 2 min</li><li>30m Sprints — 4×30m FULL SPEED · Rest 3–4 min</li><li>Sled / Hill Sprint — 6×15m (walk back recovery)</li><li>Broad Jumps 3×5 OR Bounds 3×20m</li></ul>' },
+  'sprint-2':    { title: "Sprint Workout 2", value: "$5", color: "#ea580c", bg: "#fff7ed", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', detail: '<strong>Warm-Up (15 min):</strong><ul><li>Same as Workout 1 warm-up protocol</li></ul><strong>Main Workout:</strong><ul><li>Fly 20s — 6 reps (20m buildup → 20m MAX SPEED · Rest 3–4 min)</li><li>60m Sprints — 4×60m @ 95–100% · Rest 5 min</li><li>Speed Endurance: 3×120m OR 4×100m @ 90–95% · Rest 5–6 min</li><li>Pogos 3×20 + Single-Leg Bounds 2×20m each side</li></ul>' },
+  'plyo-hill':   { title: "Hill Workout", value: "$5", color: "#16a34a", bg: "#f0fdf4", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 17 9 7 14 13 18 9 21 17"/><polyline points="1 17 23 17"/></svg>', detail: '<strong>Warm-Up (12 min):</strong><ul><li>Easy jog 3–4 min · Dynamic mobility · Sprint drills 2×20m · 3×40m build-ups</li></ul><strong>Block 1 — Short Hills:</strong><ul><li>6×15 sec — violent arm drive, powerful knee drive · Walk back · 90s rest</li></ul><strong>Block 2 — Longer Power Hills:</strong><ul><li>4×25 sec — stay tall, relaxed upper body · Walk down + 2 min recovery</li></ul><strong>Block 3 — Speed Finisher:</strong><ul><li>4×8 sec MAX — pure explosion, fast turnover · Full recovery between reps</li></ul><strong>Cool Down (8 min):</strong><ul><li>Easy walk/jog · Hamstring, hip flexor, calf, glute stretch</li></ul>' },
+  'plyo-workout':{ title: "Plyometric Workout", value: "$5", color: "#16a34a", bg: "#f0fdf4", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>', detail: '<strong>Warm-Up (10 min):</strong><ul><li>Jump rope 3 min · Dynamic mobility · Pogo hops ×20 · Squat jumps ×5 · A-skips ×20m</li></ul><strong>Reactive Plyo (10 min):</strong><ul><li>Pogo Jumps 3×20 ("hot floor") · Jump Rope Speed 3×30s · Single-Leg Pogos 2×10</li></ul><strong>Power Block (15 min):</strong><ul><li>Box Jumps 5×3 (land softly, step down) · Broad Jumps 4×4 · Depth Drop to VJ 3×5</li></ul><strong>Finisher (7 min):</strong><ul><li>Bounds 3×20m · Plyo Sprint Marches 2×20m · Plyo Fast Runs 4×20m</li></ul><strong>Cool Down (3 min):</strong><ul><li>Walk + calves, hips, hamstrings, Achilles stretch</li></ul>' },
+  'plyo-ghike':  { title: "G Hike — Weighted Vest", value: "$5", color: "#16a34a", bg: "#f0fdf4", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10a8 8 0 0 1 16 0v10"/><path d="M9 20a3 3 0 0 0 6 0"/><path d="M4 15h2a2 2 0 0 1 2 2v1a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-1a2 2 0 0 1 2-2h2"/></svg>', detail: '<ul><li>Hike with weighted vest</li><li>Goal: under <strong>20 minutes</strong> to the top</li><li>Push the pace — this is a cardio + strength challenge</li></ul>' },
+  'act-soccer':  { title: "Soccer Practice", value: "Mandatory", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>', detail: '<ul><li>Must attend all soccer practices</li><li>Mandatory — does <strong>not</strong> count toward $5 physical activity payout</li></ul>' },
+  'act-volleyball':{ title: "Volleyball", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>', detail: '<ul><li>Minimum <strong>1 hour</strong> of play</li><li>Counts toward $5 physical activity payout (max 1 payout per week)</li></ul>' },
+  'act-pickleball':{ title: "Pickleball", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 3a5.5 5.5 0 0 1 0 7.78L7.27 17 5 14.73l6.22-6.23A5.5 5.5 0 0 1 13.5 3z"/><line x1="5" y1="14.73" x2="3" y2="21"/><circle cx="18.5" cy="18.5" r="1.5"/></svg>', detail: '<ul><li>Minimum <strong>1 hour</strong> of play</li><li>Counts toward $5 physical activity payout (max 1 payout per week)</li></ul>' },
+  'act-bike':    { title: "Bike Riding", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0-1-1h-3l-3.5 9.5"/><path d="M9.5 14.5L15 6"/><path d="M18.5 14.5L15 6"/></svg>', detail: '<ul><li>Minimum <strong>5 miles</strong></li><li>Must include the <strong>hill back home</strong></li><li>Counts toward $5 physical activity payout</li></ul>' },
+  'act-hike':    { title: "Hike", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 17 9 7 14 13 18 9 21 17"/></svg>', detail: '<ul><li>Minimum <strong>1 mile</strong></li><li>Counts toward $5 physical activity payout</li></ul>' },
+  'music-1':     { title: "Music Session 1", value: "Required", color: "#7c3aed", bg: "#f5f3ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', detail: '<ul><li>30-minute focused practice session</li><li>One session per day maximum</li><li>Must complete all 4 sessions per week for payout</li></ul>' },
+  'music-2':     { title: "Music Session 2", value: "Required", color: "#7c3aed", bg: "#f5f3ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', detail: '<ul><li>30-minute focused practice session</li><li>One session per day maximum</li><li>Must complete all 4 sessions per week for payout</li></ul>' },
+  'music-3':     { title: "Music Session 3", value: "Required", color: "#7c3aed", bg: "#f5f3ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', detail: '<ul><li>30-minute focused practice session</li><li>One session per day maximum</li><li>Must complete all 4 sessions per week for payout</li></ul>' },
+  'music-4':     { title: "Music Session 4", value: "Required", color: "#7c3aed", bg: "#f5f3ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', detail: '<ul><li>30-minute focused practice session</li><li>One session per day maximum</li><li><strong>Completing this session unlocks your music payout!</strong></li></ul>' },
+  'chore-clothes':  { title: "Clothes", value: "Required", color: "#d97706", bg: "#fff7ed", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.57a2 2 0 0 0-1.34-2.23z"/></svg>', detail: '<ul><li>All clothes washed, dried, folded, and put away</li><li>All 3 chores must be done to earn the $5 chores payout</li></ul>' },
+  'chore-room':     { title: "Room", value: "Required", color: "#d97706", bg: "#fff7ed", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', detail: '<ul><li>Room fully cleaned and organized</li><li>All 3 chores must be done to earn the $5 chores payout</li></ul>' },
+  'chore-bathroom': { title: "Bathroom", value: "Required", color: "#d97706", bg: "#fff7ed", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16a1 1 0 0 1 1 1v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-3a1 1 0 0 1 1-1z"/><path d="M6 12V5a2 2 0 0 1 2-2h3v2.25"/><line x1="4" y1="20" x2="4" y2="22"/><line x1="20" y1="20" x2="20" y2="22"/></svg>', detail: '<ul><li>Toilet, sink, mirror, and floors cleaned</li><li>All 3 chores must be done to earn the $5 chores payout</li></ul>' },
+  'serv-dishes-clean': { title: "Clean Dishes", value: "Service", color: "#0d9488", bg: "#f0fdfa", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8M12 11v11M6 2h12l-2 7a4 4 0 0 1-8 0L6 2z"/></svg>', detail: '<ul><li>Put away all clean dishes from the dishwasher or drying rack</li><li>Counts toward the 1 hr/week service requirement</li></ul>' },
+  'serv-dishes-dirty': { title: "Dirty Dishes", value: "Service", color: "#0d9488", bg: "#f0fdfa", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="13" rx="8" ry="3"/><path d="M4 13v3c0 1.66 3.58 3 8 3s8-1.34 8-3v-3"/><path d="M12 6a3 3 0 0 1 3 3"/><path d="M9 6a3 3 0 0 0-3 3"/><line x1="12" y1="3" x2="12" y2="6"/></svg>', detail: '<ul><li>Rinse, load, and run the dishwasher</li><li>Counts toward the 1 hr/week service requirement</li></ul>' },
+  'serv-laundry':  { title: "Your Laundry", value: "Service", color: "#0d9488", bg: "#f0fdfa", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="12" cy="13" r="4"/><circle cx="12" cy="13" r="1"/><line x1="7" y1="7" x2="7.01" y2="7"/><line x1="10" y1="7" x2="10.01" y2="7"/></svg>', detail: '<ul><li>Wash, dry, fold, and put away your own laundry</li><li>Counts toward the 1 hr/week service requirement</li></ul>' },
+  'serv-yard':   { title: "Yard Work", value: "Service", color: "#0d9488", bg: "#f0fdfa", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>', detail: '<ul><li>Mow, edge, weed, or general yard cleanup</li><li>Counts toward the 1 hr/week service requirement</li></ul>' },
+  'serv-ward':   { title: "Ward / Neighbor", value: "Service", color: "#0d9488", bg: "#f0fdfa", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>', detail: '<ul><li>Serve a ward member, neighbor, or anyone in the community</li><li>Counts toward the 1 hr/week service requirement</li></ul>' },
+  'serv-other':  { title: "Other Service", value: "Service", color: "#0d9488", bg: "#f0fdfa", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>', detail: '<ul><li>Any approved service activity</li><li>Counts toward the 1 hr/week service requirement</li></ul>' },
+  'spirit-scripture': { title: "Reading Scriptures", value: "Required", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>', detail: '<ul><li>Read from the scriptures</li><li>Counts toward the 30 min/week spiritual requirement</li></ul>' },
+  'spirit-mission':   { title: "Mission Prep", value: "Required", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>', detail: '<ul><li>Study or prepare materials related to mission preparation</li><li>Counts toward the 30 min/week spiritual requirement</li></ul>' },
+  'spirit-cfm':       { title: "Come Follow Me", value: "Required", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>', detail: '<ul><li>Study the Come Follow Me curriculum</li><li>Counts toward the 30 min/week spiritual requirement</li></ul>' },
+  'spirit-conf':      { title: "Conference Talk", value: "Required", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>', detail: '<ul><li>Watch or read a General Conference talk</li><li>Counts toward the 30 min/week spiritual requirement</li></ul>' },
+  'spirit-seminary':  { title: "Seminary Videos", value: "Required", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>', detail: '<ul><li>Watch seminary instructional videos</li><li>Counts toward the 30 min/week spiritual requirement</li></ul>' },
+  'spirit-other':     { title: "Other Spiritual", value: "Required", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', detail: '<ul><li>Any approved spiritual activity</li><li>Counts toward the 30 min/week spiritual requirement</li></ul>' },
+};
+
+// ── STATE ──
+let activeCardId = null;
+let pendingCardEl = null;
+
+function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{};}catch{return {};}}
+function saveState(s){localStorage.setItem(STORAGE_KEY,JSON.stringify(s));}
+
+// ── CARD CLICK: opens detail panel; countable tiles also increment ──
+function toggleCard(el) {
+  const id = el.dataset.id;
+  // Pulse the clicked tile so there's instant feedback
+  document.querySelectorAll('.bingo-card.selected-tile').forEach(c => c.classList.remove('selected-tile'));
+  el.classList.add('selected-tile');
+  setTimeout(() => el.classList.remove('selected-tile'), 500);
+  openDetailPanel(id);
+}
+
+// Decrement count on a countable tile (called from minus button)
+function decrementCount(event, id) {
+  event.stopPropagation();
+  const state = loadState();
+  const key = id + '_count';
+  const cur = state[key] || 0;
+  if (cur <= 0) return;
+  const newCount = cur - 1;
+  state[key] = newCount;
+  // Remove the boolean done flag if back to zero
+  if (newCount === 0) {
+    state[id] = false;
+    delete state[id + '_log'];
+    delete state[key];
+  }
+  saveState(state);
+  renderCountBadge(id, newCount);
+  updateAll();
+  if (activeCardId === id) openDetailPanel(id);
+}
+
+function renderCountBadge(id, count) {
+  const card = document.querySelector(`.bingo-card[data-id="${id}"]`);
+  if (!card) return;
+  // Remove existing badge and minus
+  const old = card.querySelector('.card-count-badge');
+  const oldMinus = card.querySelector('.card-count-minus');
+  if (old) old.remove();
+  if (oldMinus) oldMinus.remove();
+  if (count > 0) {
+    card.classList.add('done');
+    const badge = document.createElement('div');
+    badge.className = 'card-count-badge';
+    badge.textContent = '×' + count;
+    card.appendChild(badge);
+    const minus = document.createElement('button');
+    minus.className = 'card-count-minus';
+    minus.title = 'Remove one';
+    minus.innerHTML = '−';
+    minus.addEventListener('click', (e) => decrementCount(e, id));
+    card.appendChild(minus);
+  } else {
+    card.classList.remove('done');
+  }
+}
+
+// ── DETAIL PANEL ──
+function openDetailPanel(id) {
+  activeCardId = id;
+  const data = CARD_DATA[id];
+  if (!data) return;
+  const state = loadState();
+  const isDone = !!state[id];
+
+  document.getElementById('detail-empty').style.display = 'none';
+  const content = document.getElementById('detail-content');
+  content.style.display = 'block';
+
+  // ── Scroll page to top so the sticky panel is fully visible ──
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // ── Flash the panel border to signal it updated ──
+  const panel = document.getElementById('detail-panel');
+  panel.classList.remove('flash');
+  void panel.offsetWidth; // force reflow to restart animation
+  panel.classList.add('flash');
+  setTimeout(() => panel.classList.remove('flash'), 500);
+
+  // ── Slide in the content ──
+  content.classList.remove('updated');
+  void content.offsetWidth;
+  content.classList.add('updated');
+
+  // Status badge
+  const badge = document.getElementById('detail-status-badge');
+  badge.textContent = isDone ? '✓ Completed' : 'Not completed';
+  badge.className = 'detail-status ' + (isDone ? 'done' : 'pending');
+
+  // Icon
+  document.getElementById('detail-icon').style.background = data.bg;
+  document.getElementById('detail-icon').innerHTML = data.icon;
+
+  // Title / value
+  document.getElementById('detail-title').textContent = data.title;
+  document.getElementById('detail-value').textContent = data.value;
+
+  // Body
+  document.getElementById('detail-body').innerHTML = data.detail;
+
+  // Log row
+  const logRow = document.getElementById('detail-log-row');
+  const logKey = id + '_log';
+  const isCountable = !!(document.querySelector(`.bingo-card[data-id="${id}"]`)?.dataset.countable === 'true');
+  const countKey = id + '_count';
+  const count = state[countKey] || 0;
+
+  if (state[logKey]) {
+    logRow.style.display = 'block';
+    // For countable tiles show each session on its own line
+    const logHtml = state[logKey].split('\n').map(l => `<div style="margin-bottom:3px">${l}</div>`).join('');
+    document.getElementById('detail-log-text').innerHTML = logHtml;
+  } else {
+    logRow.style.display = 'none';
+  }
+
+  // Button
+  const btn = document.getElementById('detail-btn');
+  if (isCountable) {
+    btn.textContent = count > 0 ? `Log Another Session (×${count} done) →` : 'Log & Mark Complete →';
+    btn.className = 'detail-complete-btn mark';
+  } else if (isDone) {
+    btn.textContent = 'Mark as Not Done';
+    btn.className = 'detail-complete-btn unmark';
+  } else {
+    btn.textContent = 'Log & Mark Complete →';
+    btn.className = 'detail-complete-btn mark';
+  }
+}
+
+function refreshDetailPanel() {
+  if (activeCardId) openDetailPanel(activeCardId);
+}
+
+// ── DETAIL BUTTON ──
+function handleDetailBtn() {
+  if (!activeCardId) return;
+  const cardEl = document.querySelector(`.bingo-card[data-id="${activeCardId}"]`);
+  if (!cardEl) return;
+  const state = loadState();
+  const isCountable = cardEl.dataset.countable === 'true';
+
+  if (isCountable) {
+    // Always open modal to log another session
+    pendingCardEl = cardEl;
+    openModal();
+  } else if (cardEl.classList.contains('done')) {
+    // Unmark immediately
+    cardEl.classList.remove('done');
+    state[activeCardId] = false;
+    if (state[activeCardId + '_log']) delete state[activeCardId + '_log'];
+    saveState(state);
+    updateAll();
+    refreshDetailPanel();
+  } else {
+    // Open modal to log
+    pendingCardEl = cardEl;
+    openModal();
+  }
+}
+
+// ── BRIGHAM-SPECIFIC CARD DATA ──
+const CARD_DATA_BRIGHAM = {
+  'act-soccer': { title: "Swimming", value: "$5", color: "#2563eb", bg: "#eff4ff",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M2 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><circle cx="12" cy="6" r="2"/><path d="M12 8v2M9 10l3-2 3 2"/></svg>',
+    detail: '<ul><li>Minimum <strong>1.5 hours</strong></li><li>Counts toward $5 physical activity payout</li></ul>' },
+  'lift-s1': { title: "Volleyball Lift 1", value: "$5", color: "#e11d48", bg: "#fef2f2",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14"/><path d="M4 7.5v9M20 7.5v9"/><path d="M2 9v6M22 9v6"/><line x1="6" y1="12" x2="18" y2="12"/></svg>',
+    detail: '<ul><li>Back Squat — 5×5 (heavy but controlled, full depth, explosive up)</li><li>Bulgarian Split Squat — 4×6 each leg (controlled down, explosive up)</li><li>Romanian Deadlift — 4×6 (stretch hamstrings, fast up)</li><li>DB / BB Jump Squats — 4×5 (lightweight, MAX jump effort)</li><li>Standing Calf Raises — 4×12 (pause at top, slow lowering)</li><li>Tibialis Raises — 3×15</li><li>Abs</li></ul>' },
+  'lift-s2': { title: "Volleyball Lift 2", value: "$5", color: "#e11d48", bg: "#fef2f2",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14"/><path d="M4 7.5v9M20 7.5v9"/><path d="M2 9v6M22 9v6"/><line x1="6" y1="12" x2="18" y2="12"/></svg>',
+    detail: '<ul><li>Hang Power Clean — 5×3 (explosive, high pull if needed)</li><li>Trap Bar Jumps — 5×3 (moderate weight, MAX jump speed)</li><li>Barbell Hip Thrust — 4×6 (explosive lockout)</li><li>Step-Ups — 3×8 each leg (knee-height box, drive upward aggressively)</li><li>Nordic Hamstring Curl — 3×5</li><li>Seated Calf Raises — 4×15 (full stretch, explosive upward drive)</li></ul>' },
+  'plyo-workout': { title: "Volleyball Plyo Workout", value: "$5", color: "#16a34a", bg: "#f0fdf4",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+    detail: '<strong>Warm-Up (10 min):</strong><ul><li>Jump rope 3 min · Dynamic mobility · Pogo jumps ×20 · Squat jumps ×5 · Approach jumps ×3</li></ul><strong>Reactive Jump Block (10 min):</strong><ul><li>Pogo Jumps 3×20 · Single-Leg Pogos 2×10 · Jump Rope Speed 3×30s</li></ul><strong>Max Vertical Power Block (15 min):</strong><ul><li>Max Box Jumps 5×3 · Depth Jump to VJ 4×4 (minimal ground contact) · Approach Jumps 5×3 (full volleyball approach, max height)</li></ul><strong>Elasticity Block (5 min):</strong><ul><li>Repeated Tuck Jumps 3×8 · Repeated Block Jumps 3×6</li></ul><strong>Cool Down (5 min):</strong><ul><li>Walk + calves, Achilles, hip flexors, glutes</li></ul>' },
+  'plyo-hill': { title: "Vertical Hill Workout", value: "$5", color: "#16a34a", bg: "#f0fdf4",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 17 9 7 14 13 18 9 21 17"/><polyline points="1 17 23 17"/></svg>',
+    detail: '<strong>Warm-Up (10 min):</strong><ul><li>Easy jog 3–4 min · Leg swings, ankle rolls, hip circles, walking lunges</li></ul><strong>Main Workout (25 min):</strong><ul><li>Hill Bounds — 5×20m (powerful jumping strides, height &amp; projection)</li><li>Short Explosive Hill Sprints — 6×10 sec (aggressive knee drive, powerful push-off)</li><li>Single-Leg Hill Bounds — 3×10 each leg</li><li>Max Effort Hill Jumps — 5×5 (jump as high as possible, full recovery)</li></ul><strong>Cool Down (5 min):</strong><ul><li>Easy walk · Stretch calves, hips, hamstrings</li></ul>' },
+};
+
+// Default (James) card data snapshots for restore
+const CARD_DATA_JAMES = {
+  'lift-s1': { title: "Sprinter's Lift 1", detail: '<ul><li>Trap Bar Deadlift — 6×3 (heavy, explosive, full recovery)</li><li>Bulgarian Split Squat — 4×5 each leg (heavy and controlled)</li><li>Romanian Deadlift — 4×5 (slow down, fast up)</li><li>Nordic Hamstring Curl — 3×5</li><li>Pull-Ups — 4×5 (heavy)</li><li>Heavy Carries — 3 rounds</li><li>Abs</li></ul>' },
+  'lift-s2': { title: "Sprinter's Lift 2", detail: '<ul><li>Hang Power Clean — 6×2 (explosive intent)</li><li>Back Squat — 5×3 (heavy but FAST, never grind)</li><li>Barbell Hip Thrust — 4×6 (explosive lockout)</li><li>Bench Press or Push Press — 4×4</li><li>Standing Calf Raise — 3×8</li><li>Tibialis Raises — 3×15</li><li>Sled Pushes — 4×15–20m (pure power)</li></ul>' },
+  'plyo-workout': { title: "Plyometric Workout", detail: '<strong>Warm-Up (10 min):</strong><ul><li>Jump rope 3 min · Dynamic mobility · Pogo hops ×20 · Squat jumps ×5 · A-skips ×20m</li></ul><strong>Reactive Plyo (10 min):</strong><ul><li>Pogo Jumps 3×20 · Jump Rope Speed 3×30s · Single-Leg Pogos 2×10</li></ul><strong>Power Block (15 min):</strong><ul><li>Box Jumps 5×3 · Broad Jumps 4×4 · Depth Drop to VJ 3×5</li></ul><strong>Finisher (7 min):</strong><ul><li>Bounds 3×20m · Plyo Sprint Marches 2×20m · Plyo Fast Runs 4×20m</li></ul><strong>Cool Down (3 min):</strong><ul><li>Walk + calves, hips, hamstrings, Achilles stretch</li></ul>' },
+  'plyo-hill': { title: "Hill Workout", detail: '<strong>Warm-Up (12 min):</strong><ul><li>Easy jog 3–4 min · Dynamic mobility · Sprint drills 2×20m · 3×40m build-ups</li></ul><strong>Block 1 — Short Hills:</strong><ul><li>6×15 sec — violent arm drive, powerful knee drive · Walk back · 90s rest</li></ul><strong>Block 2 — Longer Power Hills:</strong><ul><li>4×25 sec — stay tall, relaxed upper body · Walk down + 2 min recovery</li></ul><strong>Block 3 — Speed Finisher:</strong><ul><li>4×8 sec MAX — pure explosion, fast turnover · Full recovery between reps</li></ul><strong>Cool Down (8 min):</strong><ul><li>Easy walk/jog · Hamstring, hip flexor, calf, glute stretch</li></ul>' },
+};
+
+function applyUserCards(userId) {
+  const isBrigham = userId === 'brigham';
+  const overrides = isBrigham ? CARD_DATA_BRIGHAM : null;
+  const defaults  = CARD_DATA_JAMES;
+
+  [
+    { id: 'lift-s1',      defaultBadge: "Sprinter's", brighamBadge: 'Volleyball' },
+    { id: 'lift-s2',      defaultBadge: "Sprinter's", brighamBadge: 'Volleyball' },
+    { id: 'plyo-workout', defaultBadge: null, brighamBadge: null },
+    { id: 'plyo-hill',    defaultBadge: null, brighamBadge: null },
+  ].forEach(({ id, defaultBadge, brighamBadge }) => {
+    const src = isBrigham ? CARD_DATA_BRIGHAM[id] : defaults[id];
+    // Update CARD_DATA live
+    if (src) {
+      CARD_DATA[id].title  = src.title;
+      CARD_DATA[id].detail = src.detail;
+    }
+    // Update tile DOM
+    const card = document.querySelector(`.bingo-card[data-id="${id}"]`);
+    if (!card) return;
+    const titleEl = card.querySelector('.card-title');
+    if (titleEl && src) titleEl.textContent = src.title;
+    const ttTitle = card.querySelector('.tooltip-title');
+    if (ttTitle && src) ttTitle.textContent = src.title;
+    // Swap sprinter/volleyball badge
+    if (defaultBadge) {
+      const badge = card.querySelector('.card-tag.sprinter');
+      if (badge) badge.textContent = isBrigham ? brighamBadge : defaultBadge;
+    }
+  });
+
+  // Hide sprinting section for Brigham
+  // Hide lifting and plyometrics sections for Grace
+  const isGrace = userId === 'grace';
+
+  const sprintSection = document.getElementById('section-sprint');
+  const sprintDivider = document.getElementById('divider-sprint');
+  if (sprintSection) sprintSection.style.display = (isBrigham || isGrace) ? 'none' : '';
+  if (sprintDivider) sprintDivider.style.display = (isBrigham || isGrace) ? 'none' : '';
+
+  const liftSection = document.getElementById('section-lifting');
+  const liftDivider = document.getElementById('divider-lifting');
+  const plyoSection = document.getElementById('section-plyo');
+  const plyoDivider = document.getElementById('divider-plyo');
+  if (liftSection) liftSection.style.display = isGrace ? 'none' : '';
+  if (liftDivider) liftDivider.style.display = isGrace ? 'none' : '';
+  if (plyoSection) plyoSection.style.display = isGrace ? 'none' : '';
+  if (plyoDivider) plyoDivider.style.display = isGrace ? 'none' : '';
+
+  // Swap bike tile requirement for Grace
+  const bikeCard = document.querySelector('.bingo-card[data-id="act-bike"]');
+  if (bikeCard) {
+    const subEl   = bikeCard.querySelector('.card-sub');
+    const ttTitle = bikeCard.querySelector('.tooltip-title');
+    const graceSrc = CARD_DATA_GRACE['act-bike'];
+    if (isGrace) {
+      if (subEl) subEl.textContent = '1 mile minimum';
+      CARD_DATA['act-bike'].detail = graceSrc.detail;
+    } else {
+      if (subEl) subEl.textContent = '5 miles · includes hill home';
+      CARD_DATA['act-bike'].detail = '<ul><li>Minimum <strong>5 miles</strong></li><li>Must include the <strong>hill back home</strong></li><li>Counts toward $5 physical activity payout</li></ul>';
+    }
+  }
+
+  // Swap soccer tile to Swimming for Brigham (volleyball stays)
+  if (isBrigham) {
+    const soccerCard = document.querySelector('.bingo-card[data-id="act-soccer"]');
+    if (soccerCard) {
+      soccerCard.style.display = '';
+      const titleEl  = soccerCard.querySelector('.card-title');
+      const subEl    = soccerCard.querySelector('.card-sub');
+      const iconWrap = soccerCard.querySelector('.card-icon-wrap');
+      const ttTitle  = soccerCard.querySelector('.tooltip-title');
+      const reqBadge = soccerCard.querySelector('.card-tag.mandatory');
+      const src = CARD_DATA_BRIGHAM['act-soccer'];
+      if (titleEl)  titleEl.textContent  = src.title;
+      if (subEl)    subEl.textContent    = '1.5 hour minimum';
+      if (iconWrap) iconWrap.innerHTML   = src.icon;
+      if (ttTitle)  ttTitle.textContent  = 'Swimming';
+      if (reqBadge) reqBadge.remove();
+      // Give it $5 value
+      const badges = soccerCard.querySelector('.card-badges');
+      if (badges && !badges.querySelector('.card-value')) {
+        const val = document.createElement('span');
+        val.className = 'card-value';
+        val.textContent = '$5';
+        badges.innerHTML = '';
+        badges.appendChild(val);
+      }
+      CARD_DATA['act-soccer'].title  = src.title;
+      CARD_DATA['act-soccer'].detail = src.detail;
+    }
+  } else {
+    // Restore soccer to Soccer Practice for James/Grace
+    const soccerCard = document.querySelector('.bingo-card[data-id="act-soccer"]');
+    if (soccerCard) {
+      soccerCard.style.display = '';
+      const titleEl  = soccerCard.querySelector('.card-title');
+      const subEl    = soccerCard.querySelector('.card-sub');
+      const iconWrap = soccerCard.querySelector('.card-icon-wrap');
+      const ttTitle  = soccerCard.querySelector('.tooltip-title');
+      const badges   = soccerCard.querySelector('.card-badges');
+      if (titleEl)  titleEl.textContent = 'Soccer Practice';
+      if (subEl)    subEl.textContent   = 'Does not count for pay';
+      if (iconWrap) iconWrap.innerHTML  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>';
+      if (ttTitle)  ttTitle.textContent = '⚽ Soccer Practice';
+      if (badges) { badges.innerHTML = '<span class="card-tag mandatory">Required</span>'; }
+      CARD_DATA['act-soccer'].title  = 'Soccer Practice';
+      CARD_DATA['act-soccer'].detail = '<ul><li>Must attend all soccer practices</li><li>Mandatory — does <strong>not</strong> count toward $5 physical activity payout</li></ul>';
+    }
+  }
+
+  // Swap volleyball tile to swimming for Grace
+  const volleyCard = document.querySelector('.bingo-card[data-id="act-volleyball"]');
+  if (volleyCard) {
+    const titleEl = volleyCard.querySelector('.card-title');
+    const subEl   = volleyCard.querySelector('.card-sub');
+    const iconWrap = volleyCard.querySelector('.card-icon-wrap');
+    const ttTitle  = volleyCard.querySelector('.tooltip-title');
+    const graceSrc = CARD_DATA_GRACE['act-volleyball'];
+    if (isGrace) {
+      if (titleEl) titleEl.textContent = graceSrc.title;
+      if (subEl)   subEl.textContent   = '1.5 hour minimum';
+      if (iconWrap) iconWrap.innerHTML  = graceSrc.icon;
+      if (ttTitle)  ttTitle.textContent = 'Swimming';
+      CARD_DATA['act-volleyball'].title  = graceSrc.title;
+      CARD_DATA['act-volleyball'].detail = graceSrc.detail;
+    } else {
+      // Brigham and James both keep Volleyball as Volleyball
+      if (titleEl) titleEl.textContent = 'Volleyball';
+      if (subEl)   subEl.textContent   = '1 hour minimum';
+      if (iconWrap) iconWrap.innerHTML  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>';
+      if (ttTitle)  ttTitle.textContent = '🏐 Volleyball';
+      CARD_DATA['act-volleyball'].title  = 'Volleyball';
+      CARD_DATA['act-volleyball'].detail = '<ul><li>Minimum <strong>1 hour</strong> of play</li><li>Counts toward $5 physical activity payout (max 1 payout per week)</li></ul>';
+    }
+  }
+
+  // Swap soccer tile to gymnastics for Grace (skip for Brigham — he has swimming there)
+  if (!isBrigham) {
+    const soccerCard = document.querySelector('.bingo-card[data-id="act-soccer"]');
+    if (soccerCard) {
+      const titleEl = soccerCard.querySelector('.card-title');
+      const iconWrap = soccerCard.querySelector('.card-icon-wrap');
+      const ttTitle = soccerCard.querySelector('.tooltip-title');
+      const graceSrc = CARD_DATA_GRACE['act-soccer'];
+      const jamesSrc = { title: 'Soccer Practice', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>' };
+      const src = isGrace ? graceSrc : jamesSrc;
+      if (titleEl) titleEl.textContent = src.title;
+      if (iconWrap) iconWrap.innerHTML = src.icon;
+      if (ttTitle) ttTitle.textContent = isGrace ? 'Gymnastics' : '⚽ Soccer Practice';
+      CARD_DATA['act-soccer'].title = src.title;
+      CARD_DATA['act-soccer'].detail = isGrace ? graceSrc.detail : '<ul><li>Must attend all soccer practices</li><li>Mandatory — does <strong>not</strong> count toward $5 physical activity payout</li></ul>';
+    }
+  }
+
+  // Swap physical activity section rules text for Grace
+  const actRules = document.querySelector('.section[style*="animation-delay:.17s"] .section-rules');
+  if (actRules) {
+    if (isGrace) {
+      actRules.innerHTML = 'Max 1 optional activity per day &nbsp;·&nbsp; Gymnastics is mandatory but does not count toward payment';
+    } else if (isBrigham) {
+      actRules.innerHTML = 'Max 2 per day';
+    } else {
+      actRules.innerHTML = 'Max 2 per day &nbsp;·&nbsp; Soccer Practice is mandatory but does not count toward payment';
+    }
+  }
+  const actBadge = document.getElementById('act-badge-min');
+  if (actBadge) {
+    actBadge.textContent = isGrace ? '3× / week · $15 max' : '1× / week · $5 max';
+  }
+}
+
+
+// ── GRACE-SPECIFIC CARD DATA ──
+const CARD_DATA_GRACE = {
+  'act-bike': { title: "Bike Riding", value: "$5", color: "#2563eb", bg: "#eff4ff",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0-1-1h-3l-3.5 9.5"/><path d="M9.5 14.5L15 6"/><path d="M18.5 14.5L15 6"/></svg>',
+    detail: '<ul><li>Minimum <strong>1 mile</strong></li><li>Counts toward $5 physical activity payout</li></ul>' },
+  'act-volleyball': { title: "Swimming", value: "$5", color: "#2563eb", bg: "#eff4ff",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M2 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><circle cx="12" cy="6" r="2"/><path d="M12 8v2M9 10l3-2 3 2"/></svg>',
+    detail: '<ul><li>Minimum <strong>1.5 hours</strong></li><li>Counts toward $5 physical activity payout</li></ul>' },
+  'act-soccer': { title: "Gymnastics", value: "Required", color: "#2563eb", bg: "#eff4ff",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="3" r="1.5"/><path d="M6 12l3-3 2 3 3-4 2 2"/><path d="M4 20c1-2 2-4 4-5l2-1 3 2 3-5"/><line x1="3" y1="20" x2="21" y2="20"/></svg>',
+    detail: '<ul><li>Mandatory — must attend gymnastics</li><li>Does <strong>not</strong> count toward $5 physical activity payout</li></ul>' },
+};
+
+// ── SIMPLE PICKER STATE ──
+const PICKER_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const PICKER_MINS   = ['00','05','10','15','20','25','30','35','40','45','50','55'];
+
+const pickerState = {
+  month: 0, day: 1, year: 2025,
+  sh: 12, sm: 0, sap: 'AM',
+  eh: 1,  em: 0, eap: 'AM'
+};
+
+function daysInMonth(month, year) {
+  return new Date(year, month + 1, 0).getDate();
+}
+
+function pickerStep(field, dir) {
+  const s = pickerState;
+  if (field === 'month') {
+    s.month = (s.month + dir + 12) % 12;
+    // clamp day
+    const maxDay = daysInMonth(s.month, s.year);
+    if (s.day > maxDay) s.day = maxDay;
+  } else if (field === 'day') {
+    const max = daysInMonth(s.month, s.year);
+    s.day = s.day + dir;
+    if (s.day < 1) s.day = max;
+    if (s.day > max) s.day = 1;
+  } else if (field === 'year') {
+    s.year = Math.max(2024, Math.min(2030, s.year + dir));
+  } else if (field === 'sh') {
+    s.sh = s.sh + dir;
+    if (s.sh < 1) s.sh = 12;
+    if (s.sh > 12) s.sh = 1;
+  } else if (field === 'sm') {
+    const idx = PICKER_MINS.indexOf(String(s.sm).padStart(2,'0'));
+    const newIdx = (idx + dir + PICKER_MINS.length) % PICKER_MINS.length;
+    s.sm = parseInt(PICKER_MINS[newIdx]);
+  } else if (field === 'eh') {
+    s.eh = s.eh + dir;
+    if (s.eh < 1) s.eh = 12;
+    if (s.eh > 12) s.eh = 1;
+  } else if (field === 'em') {
+    const idx = PICKER_MINS.indexOf(String(s.em).padStart(2,'0'));
+    const newIdx = (idx + dir + PICKER_MINS.length) % PICKER_MINS.length;
+    s.em = parseInt(PICKER_MINS[newIdx]);
+  }
+  renderPicker();
+}
+
+function pickerToggle(field) {
+  pickerState[field] = pickerState[field] === 'AM' ? 'PM' : 'AM';
+  renderPicker();
+}
+
+function renderPicker() {
+  const s = pickerState;
+  document.getElementById('pv-month').textContent = PICKER_MONTHS[s.month];
+  document.getElementById('pv-day').textContent   = s.day;
+  document.getElementById('pv-year').textContent  = s.year;
+  document.getElementById('pv-sh').textContent    = s.sh;
+  document.getElementById('pv-sm').textContent    = String(s.sm).padStart(2,'0');
+  document.getElementById('pv-sap').textContent   = s.sap;
+  document.getElementById('pv-eh').textContent    = s.eh;
+  document.getElementById('pv-em').textContent    = String(s.em).padStart(2,'0');
+  document.getElementById('pv-eap').textContent   = s.eap;
+}
+
+function openModal() {
+  const now = new Date();
+  pickerState.month = now.getMonth();
+  pickerState.day   = now.getDate();
+  pickerState.year  = now.getFullYear();
+  const h = now.getHours();
+  pickerState.sh    = h % 12 || 12;
+  pickerState.sm    = Math.floor(now.getMinutes() / 5) * 5;
+  pickerState.sap   = h < 12 ? 'AM' : 'PM';
+  const h2 = (h + 1) % 24;
+  pickerState.eh    = h2 % 12 || 12;
+  pickerState.em    = pickerState.sm;
+  pickerState.eap   = h2 < 12 ? 'AM' : 'PM';
+  renderPicker();
+  document.getElementById('modal-overlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+  pendingCardEl = null;
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function confirmLog() {
+  if (!pendingCardEl) return;
+  const id = pendingCardEl.dataset.id;
+  const s = pickerState;
+  const date  = `${PICKER_MONTHS[s.month]} ${s.day}, ${s.year}`;
+  const start = `${s.sh}:${String(s.sm).padStart(2,'0')} ${s.sap}`;
+  const end   = `${s.eh}:${String(s.em).padStart(2,'0')} ${s.eap}`;
+  const logStr = `${date} · ${start} – ${end}`;
+
+  const state = loadState();
+  const isCountable = pendingCardEl.dataset.countable === 'true';
+
+  if (isCountable) {
+    // Increment count and append log entry
+    const countKey = id + '_count';
+    const logKey = id + '_log';
+    const newCount = (state[countKey] || 0) + 1;
+    state[countKey] = newCount;
+    state[id] = true;
+    // Append this session to the log (keep all sessions)
+    const existing = state[logKey] ? state[logKey] + '\n' : '';
+    state[logKey] = existing + `Session ${newCount}: ${logStr}`;
+    saveState(state);
+    renderCountBadge(id, newCount);
+  } else {
+    state[id] = true;
+    state[id + '_log'] = logStr;
+    saveState(state);
+    pendingCardEl.classList.add('done');
+  }
+
+  updateAll();
+  refreshDetailPanel();
+  closeModal();
+}
+
+// ── PAYOUT ──
+function calculatePayout(state){
+  let total=0;
+  // Lifting: $5 each (not Grace)
+  if(currentUser !== 'grace') {
+    ['lift-s1','lift-s2','lift-home','lift-gym'].forEach(id=>{if(state[id])total+=5;});
+  }
+  // Sprint: $5 each (not Brigham)
+  if(currentUser !== 'brigham' && currentUser !== 'grace' && state['sprint-1'])total+=5;
+  if(currentUser !== 'brigham' && currentUser !== 'grace' && state['sprint-2'])total+=5;
+  // Plyo: $5 each (not Grace)
+  if(currentUser !== 'grace') {
+    if(state['plyo-hill'])total+=5;
+    if(state['plyo-workout'])total+=5;
+    if(state['plyo-ghike'])total+=5;
+  }
+  const actIds=['act-volleyball','act-pickleball','act-bike','act-hike'];
+  if(currentUser === 'brigham') actIds.push('act-soccer'); // soccer = swimming for Brigham
+  // Sum counts across all activity tiles (each session = $5)
+  const actTotal = actIds.reduce((sum, id) => sum + (state[id + '_count'] || (state[id] ? 1 : 0)), 0);
+  if(currentUser === 'grace') {
+    total += Math.min(actTotal, 3) * 5;
+  } else {
+    total += Math.min(actTotal, 1) * 5;
+  }
+  if(state['chore-clothes']&&state['chore-room']&&state['chore-bathroom'])total+=5;
+  return Math.min(total, USERS[currentUser].maxWeekly);
+}
+
+function updateAll(){
+  const state=loadState();
+  const earned=calculatePayout(state);
+  const circumference = 2 * Math.PI * 48;
+
+  const maxWeekly = USERS[currentUser].maxWeekly;
+  const payoutPct = Math.min(earned / maxWeekly, 1);
+  document.getElementById('ring-payout').setAttribute('stroke-dasharray', `${payoutPct * circumference} ${circumference}`);
+  document.getElementById('dash-payout-val').textContent = '$' + earned;
+  document.getElementById('dash-payout-sub').textContent = '$' + earned + ' earned this week';
+  document.getElementById('dash-payout-bar').style.width = (payoutPct * 100) + '%';
+  document.getElementById('dash-payout-pct').textContent = Math.round(payoutPct * 100) + '%';
+
+  const choresMet = !!(state['chore-clothes'] && state['chore-room'] && state['chore-bathroom']);
+
+  // Service: minimum 1 hour = 4 × 15-min activities (uses counts)
+  const servIds=['serv-dishes-clean','serv-dishes-dirty','serv-laundry','serv-yard','serv-ward','serv-other'];
+  const serviceDone = servIds.reduce((sum, id) => sum + (state[id + '_count'] || 0), 0);
+  const serviceMet = serviceDone >= 4;
+
+  // Spiritual: minimum 30 min = 2 × 15-min activities (uses counts)
+  const spiritIds=['spirit-scripture','spirit-mission','spirit-cfm','spirit-conf','spirit-seminary','spirit-other'];
+  const spiritualDone = spiritIds.reduce((sum, id) => sum + (state[id + '_count'] || 0), 0);
+  const spiritualMet = spiritualDone >= 2;
+
+  const musicMet = ['music-1','music-2','music-3','music-4'].filter(id=>state[id]).length >= 4;
+
+  const metCount = [choresMet, serviceMet, spiritualMet, musicMet].filter(Boolean).length;
+  const reqPct = metCount / 4;
+  document.getElementById('ring-required').setAttribute('stroke-dasharray', `${reqPct * circumference} ${circumference}`);
+  document.getElementById('dash-req-val').textContent = Math.round(reqPct * 100) + '%';
+  document.getElementById('dash-req-sub').textContent = metCount + ' of 4 requirements met';
+  document.getElementById('dash-req-bar').style.width = (reqPct * 100) + '%';
+  document.getElementById('dash-req-pct').textContent = Math.round(reqPct * 100) + '%';
+
+  setMand('mand-chores', choresMet);
+  setMand('mand-service', serviceMet);
+  setMand('mand-spiritual', spiritualMet);
+  setMand('mand-music', musicMet);
+}
+
+function setMand(id,met){
+  const el=document.getElementById(id);
+  if(el)el.classList.toggle('met',!!met);
+}
+
+function restoreState(){
+  const state=loadState();
+  document.querySelectorAll('.bingo-card').forEach(card=>{
+    const id = card.dataset.id;
+    if (card.dataset.countable === 'true') {
+      const count = state[id + '_count'] || 0;
+      renderCountBadge(id, count);
+    } else {
+      card.classList.toggle('done', !!state[id]);
+    }
+  });
+}
+
+function resetAll(){
+  localStorage.removeItem(STORAGE_KEY);
+  // Clear all card done states and count badges
+  document.querySelectorAll('.bingo-card').forEach(c => {
+    c.classList.remove('done');
+    const badge = c.querySelector('.card-count-badge');
+    const minus = c.querySelector('.card-count-minus');
+    if (badge) badge.remove();
+    if (minus) minus.remove();
+  });
+  // Reset detail panel
+  activeCardId = null;
+  pendingCardEl = null;
+  document.getElementById('detail-empty').style.display = 'flex';
+  document.getElementById('detail-content').style.display = 'none';
+  // Zero out rings and dashboard
+  const circ = 2 * Math.PI * 48;
+  document.getElementById('ring-payout').setAttribute('stroke-dasharray', `0 ${circ}`);
+  document.getElementById('ring-required').setAttribute('stroke-dasharray', `0 ${circ}`);
+  document.getElementById('dash-payout-val').textContent = '$0';
+  document.getElementById('dash-payout-sub').textContent = '$0 earned this week';
+  document.getElementById('dash-payout-bar').style.width = '0%';
+  document.getElementById('dash-payout-pct').textContent = '0%';
+  document.getElementById('dash-req-val').textContent = '0%';
+  document.getElementById('dash-req-sub').textContent = '0 of 4 requirements met';
+  document.getElementById('dash-req-bar').style.width = '0%';
+  document.getElementById('dash-req-pct').textContent = '0%';
+}
+
+// ── SUBMIT MODAL ──
+let selectedPayment = '';
+
+const CAT_STYLES = {
+  lifting:  { label:'Lifting',   color:'#e11d48', bg:'#fef2f2' },
+  sprint:   { label:'Sprinting', color:'#ea580c', bg:'#fff7ed' },
+  plyo:     { label:'Plyo',      color:'#16a34a', bg:'#f0fdf4' },
+  activity: { label:'Activity',  color:'#2563eb', bg:'#eff4ff' },
+  music:    { label:'Music',     color:'#7c3aed', bg:'#f5f3ff' },
+  chores:   { label:'Chores',    color:'#d97706', bg:'#fff7ed' },
+  service:  { label:'Service',   color:'#0d9488', bg:'#f0fdfa' },
+  spiritual:{ label:'Spiritual', color:'#2563eb', bg:'#eff4ff' },
+};
+
+function openSubmitModal() {
+  selectedPayment = '';
+  renderSubmitModal('review');
+  document.getElementById('submit-overlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSubmitModal() {
+  document.getElementById('submit-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function handleSubmitOverlay(e) {
+  if (e.target === document.getElementById('submit-overlay')) closeSubmitModal();
+}
+
+function selectPayment(method) {
+  selectedPayment = method;
+  document.querySelectorAll('.payment-opt').forEach(el => {
+    el.classList.toggle('selected', el.dataset.method === method);
+  });
+  document.getElementById('submit-send-btn').disabled = false;
+}
+
+function renderSubmitModal(view) {
+  const state = loadState();
+  const earned = calculatePayout(state);
+
+  // Build completed paid activities list
+  const completed = [];
+  document.querySelectorAll('.bingo-card').forEach(card => {
+    const id = card.dataset.id;
+    if (!state[id]) return;
+    const data = CARD_DATA[id];
+    if (!data) return;
+    const section = card.dataset.section || '';
+    completed.push({ id, title: data.title, value: data.value, section, log: state[id + '_log'] || '' });
+  });
+
+  // Build required activities status
+  const REQ_GROUPS = [
+    {
+      label: 'Music',
+      icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
+      color: '#7c3aed', bg: '#f5f3ff',
+      ids: ['music-1','music-2','music-3','music-4'],
+      rule: '4 of 4 sessions required',
+      check: (s) => ['music-1','music-2','music-3','music-4'].filter(id=>s[id]).length >= 4,
+      count: (s) => ['music-1','music-2','music-3','music-4'].filter(id=>s[id]).length + ' of 4 sessions completed',
+    },
+    {
+      label: 'Chores',
+      icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+      color: '#d97706', bg: '#fff7ed',
+      ids: ['chore-clothes','chore-room','chore-bathroom'],
+      rule: 'All 3 chores required',
+      check: (s) => !!(s['chore-clothes'] && s['chore-room'] && s['chore-bathroom']),
+      count: (s) => {
+        const done = ['chore-clothes','chore-room','chore-bathroom'].filter(id=>s[id]);
+        const names = {'chore-clothes':'Clothes','chore-room':'Room','chore-bathroom':'Bathroom'};
+        return done.length === 3 ? 'All 3 complete' : done.map(id=>names[id]).join(', ') + (done.length === 0 ? '0 of 3 done' : ' done (' + done.length + '/3)');
+      },
+    },
+    {
+      label: 'Service',
+      icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+      color: '#0d9488', bg: '#f0fdfa',
+      ids: ['serv-dishes-clean','serv-dishes-dirty','serv-laundry','serv-yard','serv-ward','serv-other'],
+      rule: '4 sessions required (1 hour)',
+      check: (s) => ['serv-dishes-clean','serv-dishes-dirty','serv-laundry','serv-yard','serv-ward','serv-other'].reduce((sum,id)=>sum+(s[id+'_count']||0),0) >= 4,
+      count: (s) => {
+        const total = ['serv-dishes-clean','serv-dishes-dirty','serv-laundry','serv-yard','serv-ward','serv-other'].reduce((sum,id)=>sum+(s[id+'_count']||0),0);
+        return total === 0 ? 'None logged yet' : `${total} session${total===1?'':'s'} logged (need 4)`;
+      },
+    },
+    {
+      label: 'Spiritual',
+      icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+      color: '#2563eb', bg: '#eff4ff',
+      ids: ['spirit-scripture','spirit-mission','spirit-cfm','spirit-conf','spirit-seminary','spirit-other'],
+      rule: '2 sessions required (30 min)',
+      check: (s) => ['spirit-scripture','spirit-mission','spirit-cfm','spirit-conf','spirit-seminary','spirit-other'].reduce((sum,id)=>sum+(s[id+'_count']||0),0) >= 2,
+      count: (s) => {
+        const total = ['spirit-scripture','spirit-mission','spirit-cfm','spirit-conf','spirit-seminary','spirit-other'].reduce((sum,id)=>sum+(s[id+'_count']||0),0);
+        return total === 0 ? 'None logged yet' : `${total} session${total===1?'':'s'} logged (need 2)`;
+      },
+    },
+  ];
+
+  const body = document.getElementById('submit-body');
+
+  if (view === 'review') {
+    body.innerHTML = `
+      <div class="submit-section-label">Activities Completed This Week</div>
+      ${completed.length === 0
+        ? '<div class="summary-empty">No activities logged yet. Complete some tiles first!</div>'
+        : `<table class="summary-table">
+            <thead><tr><th>Activity</th><th>Category</th><th>Logged</th></tr></thead>
+            <tbody>
+              ${completed.map(a => {
+                const cat = CAT_STYLES[a.section] || { label: a.section, color: '#555', bg: '#f0f0f0' };
+                return `<tr>
+                  <td>${a.title}</td>
+                  <td><span class="summary-cat" style="color:${cat.color};background:${cat.bg}">${cat.label}</span></td>
+                  <td><div class="summary-log">${a.log || '—'}</div></td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>`
+      }
+
+      <div class="submit-section-label" style="margin-top:20px">Required Activities</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        ${REQ_GROUPS.map(g => {
+          const met = g.check(state);
+          const detail = g.count(state);
+          return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:${met ? g.bg : 'var(--bg)'};border:1.5px solid ${met ? g.color+'40' : 'var(--border)'};">
+            <div style="width:28px;height:28px;border-radius:7px;background:${g.bg};display:flex;align-items:center;justify-content:center;flex-shrink:0;">${g.icon}</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:.82rem;font-weight:700;color:${met ? g.color : 'var(--text-2)'};">${g.label}</div>
+              <div style="font-size:.72rem;color:var(--text-3);margin-top:1px;">${detail}</div>
+            </div>
+            <div style="flex-shrink:0;">
+              ${met
+                ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${g.color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
+                : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
+              }
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <div class="submit-section-label" style="margin-top:20px">Weekly Payout</div>
+      <div class="payout-amount">$${earned}</div>
+      <div class="payout-note">of $${USERS[currentUser].maxWeekly} weekly max · Summer total: $${USERS[currentUser].maxTotal}</div>
+
+      <div class="submit-section-label">How would you like to be paid?</div>
+      <div class="payment-opts">
+        <div class="payment-opt" data-method="Venmo" onclick="selectPayment('Venmo')">
+          <div class="payment-opt-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          </div>
+          <div class="payment-opt-label">Venmo</div>
+          <div class="payment-opt-sub">Instant transfer</div>
+        </div>
+        <div class="payment-opt" data-method="Vanguard" onclick="selectPayment('Vanguard')">
+          <div class="payment-opt-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <div class="payment-opt-label">Vanguard</div>
+          <div class="payment-opt-sub">Investment account</div>
+        </div>
+        <div class="payment-opt" data-method="50/50 Split" onclick="selectPayment('50/50 Split')">
+          <div class="payment-opt-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="payment-opt-label">50/50 Split</div>
+          <div class="payment-opt-sub">Half Venmo · Half Vanguard</div>
+        </div>
+      </div>
+
+      <div class="submit-section-label" style="margin-top:18px">Send summary to</div>
+      <input class="submit-input" id="submit-email" type="email" placeholder="dad@email.com" value="" />
+
+      <button class="submit-send-btn" id="submit-send-btn" disabled onclick="sendSummary()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+        Send Summary
+      </button>
+    `;
+  }
+}
+
+function sendSummary() {
+  const state = loadState();
+  const earned = calculatePayout(state);
+  const emailEl = document.getElementById('submit-email');
+  const toEmail = emailEl ? emailEl.value.trim() : '';
+
+  // Build completed list
+  const completed = [];
+  document.querySelectorAll('.bingo-card').forEach(card => {
+    const id = card.dataset.id;
+    if (!state[id]) return;
+    const data = CARD_DATA[id];
+    if (!data) return;
+    const section = card.dataset.section || '';
+    const cat = CAT_STYLES[section] || { label: section };
+    completed.push({ title: data.title, category: cat.label, log: state[id + '_log'] || 'No time logged' });
+  });
+
+  // Build plain-text email body
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  const actLines = completed.length > 0
+    ? completed.map(a => `• ${a.title} (${a.category}) — ${a.log}`).join('\n')
+    : '• No activities logged.';
+
+  const body = [
+    `SUMMER MONEY BINGO — WEEKLY CARD SUBMISSION`,
+    `James Greer | Submitted: ${dateStr}`,
+    ``,
+    `COMPLETED ACTIVITIES (${completed.length})`,
+    `─────────────────────────────────────────`,
+    actLines,
+    ``,
+    `WEEKLY PAYOUT`,
+    `─────────────────────────────────────────`,
+    `Amount Earned: $${earned} of $${USERS[currentUser].maxWeekly}`,
+    `Payment Method: ${selectedPayment}`,
+    ``,
+    `Please process payment at your earliest convenience.`,
+    ``,
+    `— James Greer`,
+  ].join('\n');
+
+  const subject = `Summer Money Bingo — Weekly Submission ($${earned}) | James Greer`;
+
+  // Open mailto — works on all devices without needing an email service
+  const mailtoLink = `mailto:${encodeURIComponent(toEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.open(mailtoLink, '_blank');
+
+  // Show success screen
+  document.getElementById('submit-body').innerHTML = `
+    <div class="submit-success">
+      <div class="submit-success-icon">✅</div>
+      <div class="submit-success-title">Card Submitted!</div>
+      <div class="submit-success-sub">
+        Your email app has been opened with your weekly summary.<br/><br/>
+        <strong>$${earned}</strong> earned this week<br/>
+        Payment via <strong>${selectedPayment}</strong><br/>
+        <span style="color:var(--text-4);font-size:.75rem;margin-top:8px;display:block">
+          ${completed.length} activit${completed.length === 1 ? 'y' : 'ies'} completed · ${dateStr}
+        </span>
+      </div>
+      <button onclick="closeSubmitModal()" style="
+        margin-top:20px;padding:10px 28px;border-radius:8px;
+        border:1.5px solid var(--border);background:var(--bg);
+        font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;
+        color:var(--text-2);cursor:pointer;
+      ">Done</button>
+    </div>
+  `;
+}
+
+applyUser(currentUser);
+restoreState();
+updateAll();
+</script>
+</body>
+</html>
