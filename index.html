@@ -2326,14 +2326,14 @@ function applyUserCards(userId) {
     if (isGrace) {
       actRules.innerHTML = 'Max 1 optional activity per day &nbsp;·&nbsp; Gymnastics is mandatory but does not count toward payment';
     } else if (isBrigham) {
-      actRules.innerHTML = 'Max 2 per day';
+      actRules.innerHTML = 'Max 2 per week &nbsp;·&nbsp; 1 per day max';
     } else {
       actRules.innerHTML = 'Max 2 per day &nbsp;·&nbsp; Soccer Practice is mandatory but does not count toward payment';
     }
   }
   const actBadge = document.getElementById('act-badge-min');
   if (actBadge) {
-    actBadge.textContent = isGrace ? '3× / week · $15 max' : '1× / week · $5 max';
+    actBadge.textContent = isGrace ? '3× / week · $15 max' : isBrigham ? '2× / week · $10 max' : '1× / week · $5 max';
   }
 }
 
@@ -2503,6 +2503,8 @@ function calculatePayout(state){
   const actTotal = actIds.reduce((sum, id) => sum + (state[id + '_count'] || (state[id] ? 1 : 0)), 0);
   if(currentUser === 'grace') {
     total += Math.min(actTotal, 3) * 5;
+  } else if(currentUser === 'brigham') {
+    total += Math.min(actTotal, 2) * 5;
   } else {
     total += Math.min(actTotal, 1) * 5;
   }
@@ -2806,13 +2808,15 @@ function sendSummary() {
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
+  const userName = USERS[currentUser].name;
+
   const actLines = completed.length > 0
     ? completed.map(a => `• ${a.title} (${a.category}) — ${a.log}`).join('\n')
     : '• No activities logged.';
 
   const body = [
     `SUMMER MONEY BINGO — WEEKLY CARD SUBMISSION`,
-    `James Greer | Submitted: ${dateStr}`,
+    `${userName} | Submitted: ${dateStr}`,
     ``,
     `COMPLETED ACTIVITIES (${completed.length})`,
     `─────────────────────────────────────────`,
@@ -2825,10 +2829,10 @@ function sendSummary() {
     ``,
     `Please process payment at your earliest convenience.`,
     ``,
-    `— James Greer`,
+    `— ${userName}`,
   ].join('\n');
 
-  const subject = `Summer Money Bingo — Weekly Submission ($${earned}) | James Greer`;
+  const subject = `Summer Money Bingo — Weekly Submission ($${earned}) | ${userName}`;
 
   // Open mailto — works on all devices without needing an email service
   const mailtoLink = `mailto:${encodeURIComponent(toEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
