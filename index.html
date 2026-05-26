@@ -1366,6 +1366,32 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
         <div class="tooltip"><div class="tooltip-title">🥾 Hike</div><ul><li>Minimum <strong>1 mile</strong></li></ul></div>
       </div>
 
+      <div class="bingo-card" data-id="act-soccer-pay" data-value="1" data-section="activity" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">Soccer</div>
+        <div class="card-sub">1 hour minimum</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">⚽ Soccer</div><ul><li>Minimum <strong>1 hour</strong></li><li>Counts toward physical activity payout</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="act-other" data-value="1" data-section="activity" data-countable="true" onclick="toggleCard(this)">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">Other</div>
+        <div class="card-sub">Any approved activity</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">Other Activity</div><ul><li>Any approved physical activity</li><li>Counts toward physical activity payout</li></ul></div>
+      </div>
+
     </div>
   </div>
   <div class="divider"></div>
@@ -1941,6 +1967,8 @@ const CARD_DATA = {
   'act-pickleball':{ title: "Pickleball", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 3a5.5 5.5 0 0 1 0 7.78L7.27 17 5 14.73l6.22-6.23A5.5 5.5 0 0 1 13.5 3z"/><line x1="5" y1="14.73" x2="3" y2="21"/><circle cx="18.5" cy="18.5" r="1.5"/></svg>', detail: '<ul><li>Minimum <strong>1 hour</strong> of play</li><li>Counts toward $5 physical activity payout (max 1 payout per week)</li></ul>' },
   'act-bike':    { title: "Bike Riding", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0-1-1h-3l-3.5 9.5"/><path d="M9.5 14.5L15 6"/><path d="M18.5 14.5L15 6"/></svg>', detail: '<ul><li>Minimum <strong>5 miles</strong></li><li>Must include the <strong>hill back home</strong></li><li>Counts toward $5 physical activity payout</li></ul>' },
   'act-hike':    { title: "Hike", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 17 9 7 14 13 18 9 21 17"/></svg>', detail: '<ul><li>Minimum <strong>1 mile</strong></li><li>Counts toward $5 physical activity payout</li></ul>' },
+  'act-other': { title: "Other", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>', detail: '<ul><li>Any approved physical activity</li><li>Counts toward physical activity payout</li></ul>' },
+  'act-soccer-pay': { title: "Soccer", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>', detail: '<ul><li>Minimum <strong>1 hour</strong></li><li>Counts toward physical activity payout</li></ul>' },
   'music-1':     { title: "Music Session 1", value: "Required", color: "#7c3aed", bg: "#f5f3ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', detail: '<ul><li>30-minute focused practice session</li><li>One session per day maximum</li><li>Must complete all 4 sessions per week for payout</li></ul>' },
   'music-2':     { title: "Music Session 2", value: "Required", color: "#7c3aed", bg: "#f5f3ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', detail: '<ul><li>30-minute focused practice session</li><li>One session per day maximum</li><li>Must complete all 4 sessions per week for payout</li></ul>' },
   'music-3':     { title: "Music Session 3", value: "Required", color: "#7c3aed", bg: "#f5f3ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>', detail: '<ul><li>30-minute focused practice session</li><li>One session per day maximum</li><li>Must complete all 4 sessions per week for payout</li></ul>' },
@@ -2256,7 +2284,13 @@ function applyUserCards(userId) {
       CARD_DATA['act-soccer'].title  = src.title;
       CARD_DATA['act-soccer'].detail = src.detail;
     }
+    // Hide Soccer (paid) tile for Brigham — he has Swimming instead
+    const soccerPayCard = document.querySelector('.bingo-card[data-id="act-soccer-pay"]');
+    if (soccerPayCard) soccerPayCard.style.display = 'none';
   } else {
+    // Restore soccer-pay tile for James/Grace
+    const soccerPayCard = document.querySelector('.bingo-card[data-id="act-soccer-pay"]');
+    if (soccerPayCard) soccerPayCard.style.display = '';
     // Restore soccer to Soccer Practice for James/Grace
     const soccerCard = document.querySelector('.bingo-card[data-id="act-soccer"]');
     if (soccerCard) {
@@ -2497,7 +2531,7 @@ function calculatePayout(state){
     if(state['plyo-workout'])total+=5;
     if(state['plyo-ghike'])total+=5;
   }
-  const actIds=['act-volleyball','act-pickleball','act-bike','act-hike'];
+  const actIds=['act-volleyball','act-pickleball','act-bike','act-hike','act-soccer-pay','act-other'];
   if(currentUser === 'brigham') actIds.push('act-soccer'); // soccer = swimming for Brigham
   // Sum counts across all activity tiles (each session = $5)
   const actTotal = actIds.reduce((sum, id) => sum + (state[id + '_count'] || (state[id] ? 1 : 0)), 0);
