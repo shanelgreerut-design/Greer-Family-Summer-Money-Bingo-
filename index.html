@@ -412,6 +412,66 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
 /* ── DIVIDER ── */
 .divider{height:1px;background:var(--border);margin:4px 0 32px;}
 
+
+/* ── SECTION PROGRESS RINGS ── */
+.section-body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+.section-body .card-grid {
+  flex: 1;
+  min-width: 0;
+}
+.section-ring-wrap {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 80px;
+  align-self: center;
+}
+.section-ring {
+  position: relative;
+}
+.section-ring svg {
+  display: block;
+}
+.section-ring-bg  { fill: none; stroke: var(--border); stroke-width: 6; }
+.section-ring-fill {
+  fill: none; stroke-width: 6; stroke-linecap: round;
+  transition: stroke-dasharray .5s cubic-bezier(.4,0,.2,1);
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+.section-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+.section-ring-label {
+  font-family: 'Sora', sans-serif;
+  font-size: .78rem; font-weight: 800;
+  text-align: center;
+  line-height: 1;
+}
+.section-ring-sub {
+  font-size: .58rem; font-weight: 500;
+  color: var(--text-4);
+  text-align: center;
+  line-height: 1;
+}
+@media(max-width:640px){
+  .section-ring-wrap { display: none; }
+}
+
 /* ── PRINT ── */
 @media print{
   .site-header,.mandatory-bar,.reset-btn,.tooltip,.progress-track{display:none!important;}
@@ -889,7 +949,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
     </div>
     <div>
       <div class="header-title">Summer Money Bingo</div>
-      <div class="header-sub" id="header-sub">James Greer · Max $700</div>
+      <div class="header-sub" id="header-sub">James Greer</div>
     </div>
   </div>
   <div class="header-right">
@@ -913,6 +973,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
         <button class="user-menu-item" data-user="grace" onclick="switchUser('grace')">
           <div class="user-avatar" style="background:#7c3aed;">G</div>
           <div class="user-menu-name">Grace Greer</div>
+        </button>
+        <button class="user-menu-item" data-user="zander" onclick="switchUser('zander')">
+          <div class="user-avatar" style="background:#e11d48;">Z</div>
+          <div class="user-menu-name">Zander Evans</div>
+        </button>
+        <button class="user-menu-item" data-user="graham" onclick="switchUser('graham')">
+          <div class="user-avatar" style="background:#ea580c;">G</div>
+          <div class="user-menu-name">Graham Hawkins</div>
         </button>
       </div>
     </div>
@@ -994,9 +1062,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
       <span class="rules-card-title">Overall Rules</span>
     </div>
     <div class="rules-grid">
-      <div class="rule-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Max weekly payout: <strong id="rule-weekly-max">$50</strong></div>
-      <div class="rule-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Must complete all mandatory items + minimums</div>
-      <div class="rule-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Total maximum: <strong id="rule-total-max">$700</strong></div>
       <div class="rule-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Turn in card on <strong>Mondays</strong></div>
       <div class="rule-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Pay via Venmo · Vanguard · 50/50 Split</div>
     </div>
@@ -1190,6 +1255,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
             <li>Speed Endurance: 3×120m OR 4×100m @ 90–95% (rest 5–6 min)</li>
             <li>Pogos 3×20 + Single-Leg Bounds 2×20m each</li>
           </ul>
+        </div>
+      </div>
+
+      <div class="bingo-card" data-id="plyo-lacrosse" data-value="5" data-section="sprint" data-countable="true" onclick="toggleCard(this)" style="display:none;">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fff7ed;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l14 9-14 9V3z"/><path d="M19 12H5"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-value">$5</span></div>
+        </div>
+        <div class="card-title">Lacrosse Workout</div>
+        <div class="card-sub">Wall ball, ground balls, shooting</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip">
+          <div class="tooltip-title">🥍 Lacrosse Workout</div>
+          <ul><li>Full lacrosse skills workout</li><li>Wall ball mastery, ground balls, shooting on the run</li></ul>
         </div>
       </div>
 
@@ -1399,7 +1480,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
   <!-- ══════════════════════════════════════
        MUSIC
   ══════════════════════════════════════ -->
-  <div class="section" style="animation-delay:.20s">
+  <div class="section" id="section-music" style="animation-delay:.20s">
     <div class="section-header">
       <div class="section-icon-wrap" style="background:#f5f3ff;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
@@ -1412,7 +1493,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
         <div class="section-rules">Must complete 4 sessions per week &nbsp;·&nbsp; 30-minute sessions &nbsp;·&nbsp; 1 per day max</div>
       </div>
     </div>
-    <div class="card-grid">
+    <div class="section-body">
+<div class="card-grid">
 
       <div class="bingo-card" data-id="music-1" data-value="0" data-section="music" data-mandatory="music" onclick="toggleCard(this)">
         <div class="card-top">
@@ -1467,8 +1549,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
       </div>
 
     </div>
+    <div class="section-ring-wrap">
+      <div class="section-ring">
+        <svg width="72" height="72" viewBox="0 0 72 72">
+          <circle class="section-ring-bg" cx="36" cy="36" r="30"/>
+          <circle class="section-ring-fill" id="ring-music" cx="36" cy="36" r="30"
+            stroke="#7c3aed" stroke-dasharray="0 188.5"/>
+        </svg>
+        <div class="section-ring-center">
+          <div class="section-ring-label" id="ring-music-label" style="color:#7c3aed">0/4</div>
+          <div class="section-ring-sub">done</div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /section-body -->
   </div>
-  <div class="divider"></div>
+  <div class="divider" id="divider-music"></div>
 
   <!-- ══════════════════════════════════════
        CHORES
@@ -1486,7 +1582,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
         <div class="section-rules">Mandatory for any payment &nbsp;·&nbsp; Must complete all 3 per week for $5 payout</div>
       </div>
     </div>
-    <div class="card-grid">
+    <div class="section-body">
+<div class="card-grid">
 
       <div class="bingo-card" data-id="chore-clothes" data-value="0" data-section="chores" data-mandatory="chores" onclick="toggleCard(this)">
         <div class="card-top">
@@ -1525,6 +1622,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
       </div>
 
     </div>
+    <div class="section-ring-wrap">
+      <div class="section-ring">
+        <svg width="72" height="72" viewBox="0 0 72 72">
+          <circle class="section-ring-bg" cx="36" cy="36" r="30"/>
+          <circle class="section-ring-fill" id="ring-chores" cx="36" cy="36" r="30"
+            stroke="#d97706" stroke-dasharray="0 188.5"/>
+        </svg>
+        <div class="section-ring-center">
+          <div class="section-ring-label" id="ring-chores-label" style="color:#d97706">0/3</div>
+          <div class="section-ring-sub">done</div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /section-body -->
   </div>
   <div class="divider"></div>
 
@@ -1544,7 +1655,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
         <div class="section-rules">1 hour per week minimum &nbsp;·&nbsp; Can be done all in one day &nbsp;·&nbsp; Log at least 1 activity</div>
       </div>
     </div>
-    <div class="card-grid">
+    <div class="section-body">
+<div class="card-grid">
 
       <div class="bingo-card" data-id="serv-dishes-clean" data-value="0" data-section="service" data-mandatory="service" data-countable="true" onclick="toggleCard(this)">
         <div class="card-top">
@@ -1619,6 +1731,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
       </div>
 
     </div>
+    <div class="section-ring-wrap">
+      <div class="section-ring">
+        <svg width="72" height="72" viewBox="0 0 72 72">
+          <circle class="section-ring-bg" cx="36" cy="36" r="30"/>
+          <circle class="section-ring-fill" id="ring-service" cx="36" cy="36" r="30"
+            stroke="#0d9488" stroke-dasharray="0 188.5"/>
+        </svg>
+        <div class="section-ring-center">
+          <div class="section-ring-label" id="ring-service-label" style="color:#0d9488">0/4</div>
+          <div class="section-ring-sub">done</div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /section-body -->
   </div>
   <div class="divider"></div>
 
@@ -1638,7 +1764,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
         <div class="section-rules">30 minutes per week minimum &nbsp;·&nbsp; Can be done all in one day &nbsp;·&nbsp; Log at least 1 activity</div>
       </div>
     </div>
-    <div class="card-grid">
+    <div class="section-body">
+<div class="card-grid">
 
       <div class="bingo-card" data-id="spirit-scripture" data-value="0" data-section="spiritual" data-mandatory="spiritual" data-countable="true" onclick="toggleCard(this)">
         <div class="card-top">
@@ -1713,6 +1840,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
       </div>
 
     </div>
+    <div class="section-ring-wrap">
+      <div class="section-ring">
+        <svg width="72" height="72" viewBox="0 0 72 72">
+          <circle class="section-ring-bg" cx="36" cy="36" r="30"/>
+          <circle class="section-ring-fill" id="ring-spiritual" cx="36" cy="36" r="30"
+            stroke="#2563eb" stroke-dasharray="0 188.5"/>
+        </svg>
+        <div class="section-ring-center">
+          <div class="section-ring-label" id="ring-spiritual-label" style="color:#2563eb">0/2</div>
+          <div class="section-ring-sub">done</div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /section-body -->
   </div>
 
 </div><!-- /main -->
@@ -1878,6 +2019,8 @@ const USERS = {
   james:   { name: 'James Greer',   initial: 'J', color: '#2563eb', key: 'smb_james_2025_v2',   maxTotal: 700, maxWeekly: 50 },
   brigham: { name: 'Brigham Greer', initial: 'B', color: '#0d9488', key: 'smb_brigham_2025_v2', maxTotal: 500, maxWeekly: 40 },
   grace:   { name: 'Grace Greer',   initial: 'G', color: '#7c3aed', key: 'smb_grace_2025_v2',   maxTotal: 200, maxWeekly: 20 },
+  zander:  { name: 'Zander Evans',   initial: 'Z', color: '#e11d48', key: 'smb_zander_2025_v2',  maxTotal: 700, maxWeekly: 50 },
+  graham:  { name: 'Graham Hawkins', initial: 'G', color: '#ea580c', key: 'smb_graham_2025_v2', maxTotal: 700, maxWeekly: 50 },
 };
 
 let currentUser = localStorage.getItem('smb_active_user') || 'james';
@@ -1893,13 +2036,12 @@ function applyUser(userId) {
   // Update header
   document.getElementById('header-initial').textContent = u.initial;
   document.getElementById('header-icon-wrap').style.background = `linear-gradient(135deg, ${u.color}, #0d9488)`;
-  document.getElementById('header-sub').textContent = u.name + ' · Max $' + u.maxTotal;
+  document.getElementById('header-sub').textContent = u.name;
   document.getElementById('user-avatar-btn').textContent = u.initial;
   document.getElementById('user-avatar-btn').style.background = u.color;
   document.getElementById('user-name-btn').textContent = u.name.split(' ')[0];
   // Update rules card total and weekly max
-  const ruleTotal = document.getElementById('rule-total-max');
-  if (ruleTotal) ruleTotal.textContent = '$' + u.maxTotal;
+
   const ruleWeekly = document.getElementById('rule-weekly-max');
   if (ruleWeekly) ruleWeekly.textContent = '$' + u.maxWeekly;
   // Update dashboard ring label
@@ -1959,13 +2101,16 @@ const CARD_DATA = {
   'lift-gym':    { title: "Gym Upper Body", value: "$5", color: "#e11d48", bg: "#fef2f2", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14"/><path d="M4 7.5v9M20 7.5v9"/><path d="M2 9v6M22 9v6"/><line x1="6" y1="12" x2="18" y2="12"/></svg>', detail: '<ul><li>Chest Press Machine — 4×6–10</li><li>Seated Cable Row — 4×8–12</li><li>Lat Pulldown — 4×8–12</li><li>Shoulder Press Machine — 3×8–10</li><li>Pec Deck OR Rear Delt Fly — 3×12–15</li><li>Curls — 3×10–12</li><li>Rope Tricep Pushdown — 3×10–12</li></ul>' },
   'sprint-1':    { title: "Sprint Workout 1", value: "$5", color: "#ea580c", bg: "#fff7ed", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', detail: '<strong>Warm-Up (15 min):</strong><ul><li>Leg swings, walking lunges, hip circles, ankle mobility</li><li>A-skips, B-skips, high knees, butt kicks, bounds</li><li>4×40m build-ups gradually faster</li></ul><strong>Main Workout:</strong><ul><li>Falling Starts — 4×10m · Rest 60–90s</li><li>20m Accelerations — 5×20m @ 95–100% · Rest 2 min</li><li>30m Sprints — 4×30m FULL SPEED · Rest 3–4 min</li><li>Sled / Hill Sprint — 6×15m (walk back recovery)</li><li>Broad Jumps 3×5 OR Bounds 3×20m</li></ul>' },
   'sprint-2':    { title: "Sprint Workout 2", value: "$5", color: "#ea580c", bg: "#fff7ed", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', detail: '<strong>Warm-Up (15 min):</strong><ul><li>Same as Workout 1 warm-up protocol</li></ul><strong>Main Workout:</strong><ul><li>Fly 20s — 6 reps (20m buildup → 20m MAX SPEED · Rest 3–4 min)</li><li>60m Sprints — 4×60m @ 95–100% · Rest 5 min</li><li>Speed Endurance: 3×120m OR 4×100m @ 90–95% · Rest 5–6 min</li><li>Pogos 3×20 + Single-Leg Bounds 2×20m each side</li></ul>' },
-  'plyo-hill':   { title: "Hill Workout", value: "$5", color: "#16a34a", bg: "#f0fdf4", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 17 9 7 14 13 18 9 21 17"/><polyline points="1 17 23 17"/></svg>', detail: '<strong>Warm-Up (12 min):</strong><ul><li>Easy jog 3–4 min · Dynamic mobility · Sprint drills 2×20m · 3×40m build-ups</li></ul><strong>Block 1 — Short Hills:</strong><ul><li>6×15 sec — violent arm drive, powerful knee drive · Walk back · 90s rest</li></ul><strong>Block 2 — Longer Power Hills:</strong><ul><li>4×25 sec — stay tall, relaxed upper body · Walk down + 2 min recovery</li></ul><strong>Block 3 — Speed Finisher:</strong><ul><li>4×8 sec MAX — pure explosion, fast turnover · Full recovery between reps</li></ul><strong>Cool Down (8 min):</strong><ul><li>Easy walk/jog · Hamstring, hip flexor, calf, glute stretch</li></ul>' },
+  'plyo-hill':   { title: "Hill Workout", value: "$5", color: "#16a34a", bg: "#f0fdf4", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 17 9 7 14 13 18 9 21 17"/><polyline points="1 17 23 17"/></svg>', detail: '<strong>Warm-Up (12 min):</strong><ul><li>Easy jog 3–4 min · Dynamic mobility · Sprint drills 2×20m · 3×40m build-ups</li></ul><strong>Block 1 — Short Hills:</strong><ul><li>6×15 sec — violent arm drive, powerful knee drive · Walk back · 90s rest</li></ul><strong>Block 2 — Longer Power Hills:</strong><ul><li>4×25 sec — stay tall, relaxed upper body · Walk down + 2 min recovery</li></ul><strong>Block 3 — Speed Finisher:</strong><ul><li>4×8 sec MAX — pure explosion, fast turnover · Full recovery between reps</li></ul><strong>Block 4 — Uphill Backpedal:</strong><ul><li>4×20 sec — backpedal uphill, stay low, quick feet · Walk down full recovery</li></ul><strong>Cool Down (8 min):</strong><ul><li>Easy walk/jog · Hamstring, hip flexor, calf, glute stretch</li></ul>' },
   'plyo-workout':{ title: "Plyometric Workout", value: "$5", color: "#16a34a", bg: "#f0fdf4", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>', detail: '<strong>Warm-Up (10 min):</strong><ul><li>Jump rope 3 min · Dynamic mobility · Pogo hops ×20 · Squat jumps ×5 · A-skips ×20m</li></ul><strong>Reactive Plyo (10 min):</strong><ul><li>Pogo Jumps 3×20 ("hot floor") · Jump Rope Speed 3×30s · Single-Leg Pogos 2×10</li></ul><strong>Power Block (15 min):</strong><ul><li>Box Jumps 5×3 (land softly, step down) · Broad Jumps 4×4 · Depth Drop to VJ 3×5</li></ul><strong>Finisher (7 min):</strong><ul><li>Bounds 3×20m · Plyo Sprint Marches 2×20m · Plyo Fast Runs 4×20m</li></ul><strong>Cool Down (3 min):</strong><ul><li>Walk + calves, hips, hamstrings, Achilles stretch</li></ul>' },
   'plyo-ghike':  { title: "G Hike — Weighted Vest", value: "$5", color: "#16a34a", bg: "#f0fdf4", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10a8 8 0 0 1 16 0v10"/><path d="M9 20a3 3 0 0 0 6 0"/><path d="M4 15h2a2 2 0 0 1 2 2v1a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-1a2 2 0 0 1 2-2h2"/></svg>', detail: '<ul><li>Hike with weighted vest</li><li>Goal: under <strong>20 minutes</strong> to the top</li><li>Push the pace — this is a cardio + strength challenge</li></ul>' },
   'act-soccer':  { title: "Soccer Practice", value: "Mandatory", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>', detail: '<ul><li>Must attend all soccer practices</li><li>Mandatory — does <strong>not</strong> count toward $5 physical activity payout</li></ul>' },
   'act-volleyball':{ title: "Volleyball", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>', detail: '<ul><li>Minimum <strong>1 hour</strong> of play</li><li>Counts toward $5 physical activity payout (max 1 payout per week)</li></ul>' },
   'act-pickleball':{ title: "Pickleball", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 3a5.5 5.5 0 0 1 0 7.78L7.27 17 5 14.73l6.22-6.23A5.5 5.5 0 0 1 13.5 3z"/><line x1="5" y1="14.73" x2="3" y2="21"/><circle cx="18.5" cy="18.5" r="1.5"/></svg>', detail: '<ul><li>Minimum <strong>1 hour</strong> of play</li><li>Counts toward $5 physical activity payout (max 1 payout per week)</li></ul>' },
   'act-bike':    { title: "Bike Riding", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0-1-1h-3l-3.5 9.5"/><path d="M9.5 14.5L15 6"/><path d="M18.5 14.5L15 6"/></svg>', detail: '<ul><li>Minimum <strong>5 miles</strong></li><li>Must include the <strong>hill back home</strong></li><li>Counts toward $5 physical activity payout</li></ul>' },
+  'plyo-lacrosse': { title: "Lacrosse Workout", value: "$5", color: "#16a34a", bg: "#f0fdf4",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l14 9-14 9V3z"/><path d="M19 12H5"/></svg>',
+    detail: '<strong>Dynamic Warm-Up (10 min, 2 rounds):</strong><ul><li>High knees, butt kicks, carioca, lateral shuffle, backpedal, sprint — 20 yards each</li><li>10 walking lunges each leg · 10 bodyweight squats · 10 leg swings each direction</li><li>3×20-yard accelerations at 70%, 80%, 90%</li></ul><strong>Phase 2 — Wall Ball Mastery (15 min):</strong><ul><li>Right Hand: 50 quick sticks · 25 one-handed catches · 25 catch-switch-throw</li><li>Left Hand: 50 quick sticks · 25 one-handed catches · 25 catch-switch-throw</li><li>Mixed: 50 alternating hands · 25 behind-the-back attempts · 25 off-side catches</li></ul><strong>Phase 3 — Ground Ball Circuit (10 min):</strong><ul><li>Round 1: Approach, scoop through, sprint 20 yards — 5 reps</li><li>Round 2: Scoop, roll away, accelerate — 5 reps each side</li><li>Round 3: Scoop, sprint, simulated pass — 10 reps</li></ul><strong>Phase 4 — Shooting on the Run (15 min):</strong><ul><li>Right alley 10 shots · Left alley 10 shots · Sweep dodges 10 shots each</li><li>Change-of-direction dodge: split dodge, re-dodge, shoot — 10 reps</li></ul><strong>Phase 5 — Conditioning Finisher (8 min, 30s on/30s off):</strong><ul><li>Sprint 30 yards and back</li><li>Lateral shuffle 20 yards and back</li><li>Sprint 30 yards and back</li><li>Burpees</li><li>Sprint 30 yards and back</li><li>Ground-ball pickup and sprint</li></ul>' },
   'act-hike':    { title: "Hike", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 17 9 7 14 13 18 9 21 17"/></svg>', detail: '<ul><li>Minimum <strong>1 mile</strong></li><li>Counts toward $5 physical activity payout</li></ul>' },
   'act-other': { title: "Other", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>', detail: '<ul><li>Any approved physical activity</li><li>Counts toward physical activity payout</li></ul>' },
   'act-soccer-pay': { title: "Soccer", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>', detail: '<ul><li>Minimum <strong>1 hour</strong></li><li>Counts toward physical activity payout</li></ul>' },
@@ -2186,14 +2331,17 @@ const CARD_DATA_BRIGHAM = {
 
 // Default (James) card data snapshots for restore
 const CARD_DATA_JAMES = {
+  'sprint-1': { title: "Sprint Workout 1", detail: '<strong>Warm-Up (15 min):</strong><ul><li>Leg swings, walking lunges, hip circles, ankle mobility</li><li>A-skips, B-skips, high knees, butt kicks, bounds</li><li>4×40m build-ups</li></ul><strong>Main:</strong><ul><li>Falling Starts — 4×10m · Rest 60–90s</li><li>20m Accelerations — 5×20m @ 95–100% · Rest 2 min</li><li>30m Sprints — 4×30m FULL SPEED · Rest 3–4 min</li><li>Sled / Hill Sprint — 6×15m (walk back)</li><li>Broad Jumps 3×5 OR Bounds 3×20m</li></ul>' },
   'lift-s1': { title: "Sprinter's Lift 1", detail: '<ul><li>Trap Bar Deadlift — 6×3 (heavy, explosive, full recovery)</li><li>Bulgarian Split Squat — 4×5 each leg (heavy and controlled)</li><li>Romanian Deadlift — 4×5 (slow down, fast up)</li><li>Nordic Hamstring Curl — 3×5</li><li>Pull-Ups — 4×5 (heavy)</li><li>Heavy Carries — 3 rounds</li><li>Abs</li></ul>' },
   'lift-s2': { title: "Sprinter's Lift 2", detail: '<ul><li>Hang Power Clean — 6×2 (explosive intent)</li><li>Back Squat — 5×3 (heavy but FAST, never grind)</li><li>Barbell Hip Thrust — 4×6 (explosive lockout)</li><li>Bench Press or Push Press — 4×4</li><li>Standing Calf Raise — 3×8</li><li>Tibialis Raises — 3×15</li><li>Sled Pushes — 4×15–20m (pure power)</li></ul>' },
   'plyo-workout': { title: "Plyometric Workout", detail: '<strong>Warm-Up (10 min):</strong><ul><li>Jump rope 3 min · Dynamic mobility · Pogo hops ×20 · Squat jumps ×5 · A-skips ×20m</li></ul><strong>Reactive Plyo (10 min):</strong><ul><li>Pogo Jumps 3×20 · Jump Rope Speed 3×30s · Single-Leg Pogos 2×10</li></ul><strong>Power Block (15 min):</strong><ul><li>Box Jumps 5×3 · Broad Jumps 4×4 · Depth Drop to VJ 3×5</li></ul><strong>Finisher (7 min):</strong><ul><li>Bounds 3×20m · Plyo Sprint Marches 2×20m · Plyo Fast Runs 4×20m</li></ul><strong>Cool Down (3 min):</strong><ul><li>Walk + calves, hips, hamstrings, Achilles stretch</li></ul>' },
-  'plyo-hill': { title: "Hill Workout", detail: '<strong>Warm-Up (12 min):</strong><ul><li>Easy jog 3–4 min · Dynamic mobility · Sprint drills 2×20m · 3×40m build-ups</li></ul><strong>Block 1 — Short Hills:</strong><ul><li>6×15 sec — violent arm drive, powerful knee drive · Walk back · 90s rest</li></ul><strong>Block 2 — Longer Power Hills:</strong><ul><li>4×25 sec — stay tall, relaxed upper body · Walk down + 2 min recovery</li></ul><strong>Block 3 — Speed Finisher:</strong><ul><li>4×8 sec MAX — pure explosion, fast turnover · Full recovery between reps</li></ul><strong>Cool Down (8 min):</strong><ul><li>Easy walk/jog · Hamstring, hip flexor, calf, glute stretch</li></ul>' },
+  'plyo-hill': { title: "Hill Workout", detail: '<strong>Warm-Up (12 min):</strong><ul><li>Easy jog 3–4 min · Dynamic mobility · Sprint drills 2×20m · 3×40m build-ups</li></ul><strong>Block 1 — Short Hills:</strong><ul><li>6×15 sec — violent arm drive, powerful knee drive · Walk back · 90s rest</li></ul><strong>Block 2 — Longer Power Hills:</strong><ul><li>4×25 sec — stay tall, relaxed upper body · Walk down + 2 min recovery</li></ul><strong>Block 3 — Speed Finisher:</strong><ul><li>4×8 sec MAX — pure explosion, fast turnover · Full recovery between reps</li></ul><strong>Block 4 — Uphill Backpedal:</strong><ul><li>4×20 sec — backpedal uphill, stay low, quick feet · Walk down full recovery</li></ul><strong>Cool Down (8 min):</strong><ul><li>Easy walk/jog · Hamstring, hip flexor, calf, glute stretch</li></ul>' },
 };
 
 function applyUserCards(userId) {
   const isBrigham = userId === 'brigham';
+  const isGraham = userId === 'graham';
+  const isZander = userId === 'zander';
   const overrides = isBrigham ? CARD_DATA_BRIGHAM : null;
   const defaults  = CARD_DATA_JAMES;
 
@@ -2223,6 +2371,132 @@ function applyUserCards(userId) {
     }
   });
 
+  // Apply Graham-specific overrides
+  if (isGraham) {
+    // Rename sprint section to Speed Workouts
+    const sprintTitleNode = document.querySelector('#section-sprint .section-title');
+    if (sprintTitleNode) sprintTitleNode.childNodes[0].textContent = 'Speed Workouts';
+    Object.entries(CARD_DATA_GRAHAM).forEach(([id, src]) => {
+      if (id === 'act-soccer-pay' || id === 'act-soccer') return; // handled separately
+      CARD_DATA[id].title  = src.title;
+      if (src.detail) CARD_DATA[id].detail = src.detail;
+      const card = document.querySelector(`.bingo-card[data-id="${id}"]`);
+      if (card) {
+        const titleEl = card.querySelector('.card-title');
+        const subEl   = card.querySelector('.card-sub');
+        const ttTitle = card.querySelector('.tooltip-title');
+        if (titleEl) titleEl.textContent = src.title;
+        if (ttTitle) ttTitle.textContent = src.title;
+        // Update sub text for speed workouts
+        if (id === 'sprint-1' && subEl) subEl.textContent = 'Explosions + Sled';
+        if (id === 'sprint-2') { const iconWrap2 = card.querySelector('.card-icon-wrap'); if (subEl) subEl.textContent = '30+ min batting cage'; if (iconWrap2) iconWrap2.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l10-10"/><path d="M14 10l2-6 4 4-6 2z"/><circle cx="6" cy="18" r="2"/></svg>'; }
+        if (id === 'lift-s2') { const iconWrap3 = card.querySelector('.card-icon-wrap'); if (iconWrap3) iconWrap3.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l10-10"/><path d="M14 10l2-6 4 4-6 2z"/><circle cx="6" cy="18" r="2"/></svg>'; }
+      }
+    });
+  } else {
+    // Restore sprint section title for non-Graham
+    const sprintTitleNode = document.querySelector('#section-sprint .section-title');
+    if (sprintTitleNode && !isZander) sprintTitleNode.childNodes[0].textContent = 'Sprinting Workouts';
+    // Restore sprint-1 and sprint-2 tile names for non-Graham (Zander handles its own)
+    if (!isZander) {
+      ['sprint-1', 'sprint-2'].forEach((id, idx) => {
+        const card = document.querySelector(`.bingo-card[data-id="${id}"]`);
+        if (card) {
+          const titleEl = card.querySelector('.card-title');
+          const ttTitle = card.querySelector('.tooltip-title');
+          const subEl   = card.querySelector('.card-sub');
+          const name = `Sprint Workout ${idx + 1}`;
+          if (titleEl) titleEl.textContent = name;
+          if (ttTitle) ttTitle.textContent = name;
+          if (subEl && id === 'sprint-1') subEl.textContent = 'Accelerations + Sled';
+          if (subEl && id === 'sprint-2') subEl.textContent = 'Fly 20s + Speed Endurance';
+          const iw2 = card.querySelector('.card-icon-wrap'); if (iw2 && id === 'sprint-2') iw2.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>';
+          CARD_DATA[id].title = name;
+        }
+      });
+    }
+    // Restore lift-s2 for non-Graham
+    const defaultLift2 = CARD_DATA_JAMES['lift-s2'] || { title: "Sprinter's Lift 2" };
+    CARD_DATA['lift-s2'].title  = defaultLift2.title;
+    CARD_DATA['lift-s2'].detail = defaultLift2.detail;
+    const card = document.querySelector('.bingo-card[data-id="lift-s2"]');
+    if (card) {
+      const titleEl = card.querySelector('.card-title');
+      const ttTitle = card.querySelector('.tooltip-title');
+      if (titleEl) titleEl.textContent = defaultLift2.title;
+      if (ttTitle) ttTitle.textContent = defaultLift2.title;
+    }
+  }
+
+  // Apply Zander-specific overrides
+  if (isZander) {
+    Object.entries(CARD_DATA_ZANDER).forEach(([id, src]) => {
+      CARD_DATA[id].title  = src.title;
+      CARD_DATA[id].detail = src.detail;
+      const card = document.querySelector(`.bingo-card[data-id="${id}"]`);
+      if (card) {
+        const titleEl = card.querySelector('.card-title');
+        const ttTitle = card.querySelector('.tooltip-title');
+        if (titleEl) titleEl.textContent = src.title;
+        if (ttTitle) ttTitle.textContent = src.title;
+      }
+    });
+    // Hide sprint-1 (Lacrosse Workout) from the Lacrosse section — it lives in Plyo now
+    const sprint1Card = document.querySelector('.bingo-card[data-id="sprint-1"]');
+    if (sprint1Card) sprint1Card.style.display = 'none';
+    // Show Lacrosse Workout tile in Plyo section
+    const lacrosseCard = document.querySelector('.bingo-card[data-id="plyo-lacrosse"]');
+    if (lacrosseCard) lacrosseCard.style.display = '';
+    // Rename sprinting section title to Lacrosse Workouts
+    const sprintTitle = document.querySelector('#section-sprint .section-title');
+    if (sprintTitle) {
+      sprintTitle.childNodes[0].textContent = 'Lacrosse Workouts';
+    }
+  } else if (!isZander) {
+    // Restore sprint-1 for non-Zander
+    if (CARD_DATA_JAMES['sprint-1']) {
+      CARD_DATA['sprint-1'].title  = CARD_DATA_JAMES['sprint-1'].title;
+      CARD_DATA['sprint-1'].detail = CARD_DATA_JAMES['sprint-1'].detail;
+    }
+    // Hide Lacrosse Practice tile for non-Zander
+    const lacrosseCard = document.querySelector('.bingo-card[data-id="plyo-lacrosse"]');
+    if (lacrosseCard) lacrosseCard.style.display = 'none';
+    const card = document.querySelector('.bingo-card[data-id="sprint-1"]');
+    if (card) {
+      card.style.display = '';
+      if (!isGraham) {
+        const titleEl = card.querySelector('.card-title');
+        const ttTitle = card.querySelector('.tooltip-title');
+        if (titleEl) titleEl.textContent = 'Sprint Workout 1';
+        if (ttTitle) ttTitle.textContent = 'Sprint Workout 1';
+      }
+    }
+    // Restore plyo-workout title for non-Zander
+    const plyoCard = document.querySelector('.bingo-card[data-id="plyo-workout"]');
+    if (plyoCard) {
+      const titleEl = plyoCard.querySelector('.card-title');
+      const ttTitle = plyoCard.querySelector('.tooltip-title');
+      const subEl   = plyoCard.querySelector('.card-sub');
+      if (titleEl) titleEl.textContent = 'Plyometric Workout';
+      if (ttTitle) ttTitle.textContent = 'Plyometric Workout';
+      if (subEl)   subEl.textContent   = 'Box jumps, bounds, pogos';
+      CARD_DATA['plyo-workout'].title  = 'Plyometric Workout';
+    }
+    const card2 = document.querySelector('.bingo-card[data-id="sprint-2"]');
+    if (card2 && !isGraham) {
+      const titleEl2 = card2.querySelector('.card-title');
+      const ttTitle2 = card2.querySelector('.tooltip-title');
+      if (titleEl2) titleEl2.textContent = 'Sprint Workout 2';
+      if (ttTitle2) ttTitle2.textContent = 'Sprint Workout 2';
+      CARD_DATA['sprint-2'].title = 'Sprint Workout 2';
+    }
+    // Restore section title (not for Graham who has Speed Workouts)
+    const sprintTitle = document.querySelector('#section-sprint .section-title');
+    if (sprintTitle && !isGraham) {
+      sprintTitle.childNodes[0].textContent = 'Sprinting Workouts';
+    }
+  }
+
   // Hide sprinting section for Brigham
   // Hide lifting and plyometrics sections for Grace
   const isGrace = userId === 'grace';
@@ -2231,6 +2505,13 @@ function applyUserCards(userId) {
   const sprintDivider = document.getElementById('divider-sprint');
   if (sprintSection) sprintSection.style.display = (isBrigham || isGrace) ? 'none' : '';
   if (sprintDivider) sprintDivider.style.display = (isBrigham || isGrace) ? 'none' : '';
+
+  // Hide music section for Zander only
+  const isZanderOrGraham = userId === 'zander';
+  const musicSection = document.getElementById('section-music');
+  const musicDivider = document.getElementById('divider-music');
+  if (musicSection) musicSection.style.display = isZanderOrGraham ? 'none' : '';
+  if (musicDivider) musicDivider.style.display = isZanderOrGraham ? 'none' : '';
 
   const liftSection = document.getElementById('section-lifting');
   const liftDivider = document.getElementById('divider-lifting');
@@ -2288,25 +2569,50 @@ function applyUserCards(userId) {
     const soccerPayCard = document.querySelector('.bingo-card[data-id="act-soccer-pay"]');
     if (soccerPayCard) soccerPayCard.style.display = 'none';
   } else {
-    // Restore soccer-pay tile for James/Grace
+    // Restore soccer-pay tile for James/Grace/Zander (not Brigham)
+    // For Graham: swap soccer-pay to Swimming
     const soccerPayCard = document.querySelector('.bingo-card[data-id="act-soccer-pay"]');
-    if (soccerPayCard) soccerPayCard.style.display = '';
-    // Restore soccer to Soccer Practice for James/Grace
+    if (soccerPayCard) {
+      soccerPayCard.style.display = '';
+      const spTitleEl  = soccerPayCard.querySelector('.card-title');
+      const spSubEl    = soccerPayCard.querySelector('.card-sub');
+      const spIconWrap = soccerPayCard.querySelector('.card-icon-wrap');
+      const spTtTitle  = soccerPayCard.querySelector('.tooltip-title');
+      if (isGraham) {
+        const src = CARD_DATA_GRAHAM['act-soccer-pay'];
+        if (spTitleEl)  spTitleEl.textContent  = src.title;
+        if (spSubEl)    spSubEl.textContent    = '1 hour minimum';
+        if (spIconWrap) spIconWrap.innerHTML   = src.icon;
+        if (spTtTitle)  spTtTitle.textContent  = 'Swimming';
+        CARD_DATA['act-soccer-pay'].title  = src.title;
+        CARD_DATA['act-soccer-pay'].detail = src.detail;
+      } else {
+        if (spTitleEl)  spTitleEl.textContent  = 'Soccer';
+        if (spSubEl)    spSubEl.textContent    = '1 hour minimum';
+        if (spIconWrap) spIconWrap.innerHTML   = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>';
+        if (spTtTitle)  spTtTitle.textContent  = 'Soccer';
+        CARD_DATA['act-soccer-pay'].title  = 'Soccer';
+        CARD_DATA['act-soccer-pay'].detail = '<ul><li>Minimum <strong>1 hour</strong></li><li>Counts toward physical activity payout</li></ul>';
+      }
+    }
+    // Restore soccer tile — hide for Zander, show for others
     const soccerCard = document.querySelector('.bingo-card[data-id="act-soccer"]');
     if (soccerCard) {
-      soccerCard.style.display = '';
-      const titleEl  = soccerCard.querySelector('.card-title');
-      const subEl    = soccerCard.querySelector('.card-sub');
-      const iconWrap = soccerCard.querySelector('.card-icon-wrap');
-      const ttTitle  = soccerCard.querySelector('.tooltip-title');
-      const badges   = soccerCard.querySelector('.card-badges');
-      if (titleEl)  titleEl.textContent = 'Soccer Practice';
-      if (subEl)    subEl.textContent   = 'Does not count for pay';
-      if (iconWrap) iconWrap.innerHTML  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>';
-      if (ttTitle)  ttTitle.textContent = '⚽ Soccer Practice';
-      if (badges) { badges.innerHTML = '<span class="card-tag mandatory">Required</span>'; }
-      CARD_DATA['act-soccer'].title  = 'Soccer Practice';
-      CARD_DATA['act-soccer'].detail = '<ul><li>Must attend all soccer practices</li><li>Mandatory — does <strong>not</strong> count toward $5 physical activity payout</li></ul>';
+      soccerCard.style.display = isZander ? 'none' : '';
+      if (!isZander) {
+        const titleEl  = soccerCard.querySelector('.card-title');
+        const subEl    = soccerCard.querySelector('.card-sub');
+        const iconWrap = soccerCard.querySelector('.card-icon-wrap');
+        const ttTitle  = soccerCard.querySelector('.tooltip-title');
+        const badges   = soccerCard.querySelector('.card-badges');
+        if (titleEl)  titleEl.textContent = 'Soccer Practice';
+        if (subEl)    subEl.textContent   = 'Does not count for pay';
+        if (iconWrap) iconWrap.innerHTML  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>';
+        if (ttTitle)  ttTitle.textContent = '⚽ Soccer Practice';
+        if (badges) { badges.innerHTML = '<span class="card-tag mandatory">Required</span>'; }
+        CARD_DATA['act-soccer'].title  = 'Soccer Practice';
+        CARD_DATA['act-soccer'].detail = '<ul><li>Must attend all soccer practices</li><li>Mandatory — does <strong>not</strong> count toward $5 physical activity payout</li></ul>';
+      }
     }
   }
 
@@ -2336,7 +2642,7 @@ function applyUserCards(userId) {
     }
   }
 
-  // Swap soccer tile to gymnastics for Grace (skip for Brigham — he has swimming there)
+  // Swap soccer tile for Grace/Graham (skip for Brigham — he has swimming there)
   if (!isBrigham) {
     const soccerCard = document.querySelector('.bingo-card[data-id="act-soccer"]');
     if (soccerCard) {
@@ -2345,12 +2651,12 @@ function applyUserCards(userId) {
       const ttTitle = soccerCard.querySelector('.tooltip-title');
       const graceSrc = CARD_DATA_GRACE['act-soccer'];
       const jamesSrc = { title: 'Soccer Practice', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>' };
-      const src = isGrace ? graceSrc : jamesSrc;
+      const src = isGrace ? graceSrc : isGraham ? CARD_DATA_GRAHAM['act-soccer'] : jamesSrc;
       if (titleEl) titleEl.textContent = src.title;
       if (iconWrap) iconWrap.innerHTML = src.icon;
-      if (ttTitle) ttTitle.textContent = isGrace ? 'Gymnastics' : '⚽ Soccer Practice';
+      if (ttTitle) ttTitle.textContent = isGrace ? 'Gymnastics' : isGraham ? 'Baseball Practice' : '⚽ Soccer Practice';
       CARD_DATA['act-soccer'].title = src.title;
-      CARD_DATA['act-soccer'].detail = isGrace ? graceSrc.detail : '<ul><li>Must attend all soccer practices</li><li>Mandatory — does <strong>not</strong> count toward $5 physical activity payout</li></ul>';
+      CARD_DATA['act-soccer'].detail = isGrace ? graceSrc.detail : isGraham ? CARD_DATA_GRAHAM['act-soccer'].detail : '<ul><li>Must attend all soccer practices</li><li>Mandatory — does <strong>not</strong> count toward $5 physical activity payout</li></ul>';
     }
   }
 
@@ -2383,6 +2689,46 @@ const CARD_DATA_GRACE = {
   'act-soccer': { title: "Gymnastics", value: "Required", color: "#2563eb", bg: "#eff4ff",
     icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="3" r="1.5"/><path d="M6 12l3-3 2 3 3-4 2 2"/><path d="M4 20c1-2 2-4 4-5l2-1 3 2 3-5"/><line x1="3" y1="20" x2="21" y2="20"/></svg>',
     detail: '<ul><li>Mandatory — must attend gymnastics</li><li>Does <strong>not</strong> count toward $5 physical activity payout</li></ul>' },
+};
+
+
+// ── ZANDER-SPECIFIC CARD DATA ──
+const CARD_DATA_ZANDER = {
+  'plyo-workout': { title: "Lacrosse Plyo Workout", value: "$5", color: "#16a34a", bg: "#f0fdf4",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+    detail: '<strong>Warm-Up (10 min):</strong><ul><li>2 min light jog</li><li>30 sec high knees · 30 sec butt kicks · 30 sec lateral shuffle each direction</li><li>10 walking lunges per leg · 10 leg swings front-to-back · 10 leg swings side-to-side</li><li>2×20-yard acceleration runs at 70%</li></ul><strong>Circuit 1 — Explosive Power (3 rounds, rest 45s):</strong><ul><li>Box Jump — 8 reps</li><li>Lateral Bounds — 10 per side</li><li>Broad Jump — 6 reps</li></ul><strong>Circuit 2 — Change-of-Direction Conditioning (3 rounds, rest 60s):</strong><ul><li>Skater Jumps — 30 sec</li><li>Split Squat Jumps — 20 sec</li><li>Sprint 20 yards and back</li><li>Burpees — 10 reps</li></ul><strong>Circuit 3 — Game-Stamina Finisher (5 rounds, rest 30s):</strong><ul><li>20-yard sprint</li><li>Backpedal 20 yards</li><li>10 Tuck Jumps · 10 Push-Ups</li></ul><strong>Cool Down (5 min):</strong><ul><li>Walk 2 min · Hamstring, quad, hip flexor, calf stretches (20–30 sec each)</li></ul>' },
+  'lift-s1': { title: "Speed Lift 1", value: "$5", color: "#e11d48", bg: "#fef2f2",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14"/><path d="M4 7.5v9M20 7.5v9"/><path d="M2 9v6M22 9v6"/><line x1="6" y1="12" x2="18" y2="12"/></svg>',
+    detail: '<ul><li>Trap Bar Deadlift — 6×3 (heavy, explosive, full recovery)</li><li>Bulgarian Split Squat — 4×5 each leg (heavy and controlled)</li><li>Romanian Deadlift — 4×5 (slow down, fast up)</li><li>Nordic Hamstring Curl — 3×5</li><li>Pull-Ups — 4×5 (heavy)</li><li>Heavy Carries — 3 rounds</li><li>Abs</li></ul>' },
+  'lift-s2': { title: "Speed Lift 2", value: "$5", color: "#e11d48", bg: "#fef2f2",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14"/><path d="M4 7.5v9M20 7.5v9"/><path d="M2 9v6M22 9v6"/><line x1="6" y1="12" x2="18" y2="12"/></svg>',
+    detail: '<ul><li>Hang Power Clean — 6×2 (explosive intent)</li><li>Back Squat — 5×3 (heavy but FAST, never grind)</li><li>Barbell Hip Thrust — 4×6 (explosive lockout)</li><li>Bench Press or Push Press — 4×4</li><li>Standing Calf Raise — 3×8</li><li>Tibialis Raises — 3×15</li><li>Sled Pushes — 4×15–20m (pure power)</li></ul>' },
+  'sprint-2': { title: "Speed Workout", value: "$5", color: "#ea580c", bg: "#fff7ed",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+    detail: '<strong>Warm-Up (15 min):</strong><ul><li>Same as Lacrosse Workout warm-up protocol</li></ul><strong>Main:</strong><ul><li>Fly 20s — 6 reps (20m buildup → 20m MAX SPEED · Rest 3–4 min)</li><li>60m Sprints — 4×60m @ 95–100% · Rest 5 min</li><li>Speed Endurance: 3×120m OR 4×100m @ 90–95% · Rest 5–6 min</li><li>Pogos 3×20 + Single-Leg Bounds 2×20m each side</li></ul>' },
+  'sprint-1': { title: "Lacrosse Workout", value: "$5", color: "#ea580c", bg: "#fff7ed",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+    detail: '<strong>Warm-Up (10 min):</strong><ul><li>2 min light jog</li><li>30 sec high knees · 30 sec butt kicks · 30 sec lateral shuffle each direction</li><li>10 walking lunges per leg · 10 leg swings front-to-back · 10 leg swings side-to-side</li><li>2×20-yard acceleration runs at 70%</li></ul><strong>Circuit 1 — Explosive Power (3 rounds, rest 45s):</strong><ul><li>Box Jump — 8 reps</li><li>Lateral Bounds — 10 per side</li><li>Broad Jump — 6 reps</li></ul><strong>Circuit 2 — Change-of-Direction Conditioning (3 rounds, rest 60s):</strong><ul><li>Skater Jumps — 30 sec</li><li>Split Squat Jumps — 20 sec</li><li>Sprint 20 yards and back</li><li>Burpees — 10 reps</li></ul><strong>Circuit 3 — Game-Stamina Finisher (5 rounds, rest 30s):</strong><ul><li>20-yard sprint</li><li>Backpedal 20 yards</li><li>10 Tuck Jumps · 10 Push-Ups</li></ul><strong>Cool Down (5 min):</strong><ul><li>Walk 2 min · Hamstring, quad, hip flexor, calf stretches (20–30 sec each)</li></ul>' },
+};
+
+
+// ── GRAHAM-SPECIFIC CARD DATA ──
+const CARD_DATA_GRAHAM = {
+  'sprint-1': { title: "Speed Workout 1", value: "$5", color: "#ea580c", bg: "#fff7ed",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+    detail: '<strong>Warm-Up (15 min):</strong><ul><li>Leg swings, walking lunges, hip circles, ankle mobility</li><li>A-skips, B-skips, high knees, butt kicks, bounds</li><li>4×40m build-ups</li></ul><strong>Main:</strong><ul><li>Falling Starts — 4×10m · Rest 60–90s</li><li>20m Accelerations — 5×20m @ 95–100% · Rest 2 min</li><li>30m Sprints — 4×30m FULL SPEED · Rest 3–4 min</li><li>Sled / Hill Sprint — 6×15m (walk back)</li><li>Broad Jumps 3×5 OR Bounds 3×20m</li></ul>' },
+  'sprint-2': { title: "Batting Cage", value: "$5", color: "#ea580c", bg: "#fff7ed",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l10-10"/><path d="M14 10l2-6 4 4-6 2z"/><circle cx="6" cy="18" r="2"/></svg>',
+    detail: '<ul><li>Minimum <strong>30 minutes</strong> of batting cage work</li><li>Focus on pitch recognition, contact, and power</li><li>Mix of tee work, soft toss, and live pitching if available</li><li>Track swings — aim for quality reps over quantity</li></ul>' },
+  'lift-s2': { title: "Bat Speed Lift", value: "$5", color: "#e11d48", bg: "#fef2f2",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l10-10"/><path d="M14 10l2-6 4 4-6 2z"/><circle cx="6" cy="18" r="2"/></svg>',
+    detail: '<strong>Dynamic Warm-Up (10 min):</strong><ul><li>High knees ×20 yds · Butt kicks ×20 yds · Lateral shuffles ×20 yds · Walking lunges ×10 each leg · Leg swings ×10 each direction</li><li>Activation: Band pull-aparts ×20 · Mini-band lateral walks ×10 each way · Plank ×30 sec</li></ul><strong>Block 1 — Explosive Power (15 min):</strong><ul><li>Medicine Ball Rotational Throws — 3×6 each side (full hip rotation, max effort)</li><li>Medicine Ball Scoop Toss — 3×6 (explode from hips)</li><li>Box Jumps — 3×5 (maximum effort, rest 90 sec)</li></ul><strong>Block 2 — Lower Body Power (15 min):</strong><ul><li>Trap Bar Deadlift — 4×5</li><li>Bulgarian Split Squat — 3×8 each leg</li><li>Single-Leg RDL — 3×8 each side</li></ul><strong>Block 3 — Bat Speed Strength (15 min):</strong><ul><li>Landmine Rotations — 3×10 each side</li><li>Cable Woodchoppers — 3×12 each side</li><li>Pull-Ups — 3 sets to near failure</li><li>Push-Ups — 3×15–20 (explosive if possible)</li></ul><strong>Finisher (5 min)</strong>' },
+  'act-soccer-pay': { title: "Swimming", value: "$5", color: "#2563eb", bg: "#eff4ff",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M2 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><circle cx="12" cy="6" r="2"/><path d="M12 8v2M9 10l3-2 3 2"/></svg>',
+    detail: '<ul><li>Minimum <strong>1 hour</strong></li><li>Counts toward physical activity payout</li></ul>' },
+  'act-soccer': { title: "Baseball Practice", value: "Required", color: "#2563eb", bg: "#eff4ff",
+    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93c4.69 4.69 4.69 12.26 0 16.97M19.07 4.93c-4.69 4.69-4.69 12.26 0 16.97"/></svg>',
+    detail: '<ul><li>Must attend all baseball practices</li><li>Mandatory — does <strong>not</strong> count toward $5 physical activity payout</li></ul>' },
 };
 
 // ── SIMPLE PICKER STATE ──
@@ -2530,6 +2876,8 @@ function calculatePayout(state){
     if(state['plyo-hill'])total+=5;
     if(state['plyo-workout'])total+=5;
     if(state['plyo-ghike'])total+=5;
+  const lacrosseCount = state['plyo-lacrosse_count'] || (state['plyo-lacrosse'] ? 1 : 0);
+  total += lacrosseCount * 5;
   }
   const actIds=['act-volleyball','act-pickleball','act-bike','act-hike','act-soccer-pay','act-other'];
   if(currentUser === 'brigham') actIds.push('act-soccer'); // soccer = swimming for Brigham
@@ -2571,13 +2919,16 @@ function updateAll(){
   const spiritualDone = spiritIds.reduce((sum, id) => sum + (state[id + '_count'] || 0), 0);
   const spiritualMet = spiritualDone >= 2;
 
-  const musicMet = ['music-1','music-2','music-3','music-4'].filter(id=>state[id]).length >= 4;
+  const musicMet = (currentUser === 'zander')
+    ? true  // music not required for Zander
+    : ['music-1','music-2','music-3','music-4'].filter(id=>state[id]).length >= 4;
 
-  const metCount = [choresMet, serviceMet, spiritualMet, musicMet].filter(Boolean).length;
-  const reqPct = metCount / 4;
+  const reqTotal = (currentUser === 'zander') ? 3 : 4;
+  const metCount = [choresMet, serviceMet, spiritualMet, musicMet].filter(Boolean).length - (musicMet && (currentUser === 'zander') ? 1 : 0);
+  const reqPct = metCount / reqTotal;
   document.getElementById('ring-required').setAttribute('stroke-dasharray', `${reqPct * circumference} ${circumference}`);
   document.getElementById('dash-req-val').textContent = Math.round(reqPct * 100) + '%';
-  document.getElementById('dash-req-sub').textContent = metCount + ' of 4 requirements met';
+  document.getElementById('dash-req-sub').textContent = metCount + ' of ' + reqTotal + ' requirements met';
   document.getElementById('dash-req-bar').style.width = (reqPct * 100) + '%';
   document.getElementById('dash-req-pct').textContent = Math.round(reqPct * 100) + '%';
 
@@ -2585,6 +2936,22 @@ function updateAll(){
   setMand('mand-service', serviceMet);
   setMand('mand-spiritual', spiritualMet);
   setMand('mand-music', musicMet);
+
+  // ── Section progress rings ──
+  const CIRC_SMALL = 2 * Math.PI * 30; // r=30 → 188.5
+  function setRing(id, val, max) {
+    const el = document.getElementById(id);
+    const lbl = document.getElementById(id + '-label');
+    const pct = Math.min(val / max, 1);
+    if (el) el.setAttribute('stroke-dasharray', `${pct * CIRC_SMALL} ${CIRC_SMALL}`);
+    if (lbl) lbl.textContent = val + '/' + max;
+  }
+  const musicDoneCount = ['music-1','music-2','music-3','music-4'].filter(id=>state[id]).length;
+  setRing('ring-music', musicDoneCount, 4);
+  const choresDone = ['chore-clothes','chore-room','chore-bathroom'].filter(id=>state[id]).length;
+  setRing('ring-chores', choresDone, 3);
+  setRing('ring-service', serviceDone, 4);
+  setRing('ring-spiritual', spiritualDone, 2);
 }
 
 function setMand(id,met){
@@ -2782,7 +3149,7 @@ function renderSubmitModal(view) {
 
       <div class="submit-section-label" style="margin-top:20px">Weekly Payout</div>
       <div class="payout-amount">$${earned}</div>
-      <div class="payout-note">of $${USERS[currentUser].maxWeekly} weekly max · Summer total: $${USERS[currentUser].maxTotal}</div>
+      <div class="payout-note">of $${USERS[currentUser].maxWeekly} weekly max</div>
 
       <div class="submit-section-label">How would you like to be paid?</div>
       <div class="payment-opts">
