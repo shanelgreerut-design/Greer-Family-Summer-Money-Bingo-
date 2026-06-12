@@ -1579,7 +1579,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
           Chores
           <span class="badge-mandatory"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Required</span>
         </div>
-        <div class="section-rules">Mandatory for any payment &nbsp;·&nbsp; Must complete all 3 per week for $5 payout</div>
+        <div class="section-rules" id="chores-section-rules">Mandatory for any payment &nbsp;·&nbsp; Must complete all 3 per week for $5 payout</div>
       </div>
     </div>
     <div class="section-body">
@@ -1619,6 +1619,42 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
         <div class="card-title">Bathroom</div>
         <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
         <div class="tooltip"><div class="tooltip-title">🚿 Bathroom</div><ul><li>Bathroom cleaned for the week</li><li>All 3 chores needed for $5 payout</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="chore-garbage" data-value="0" data-section="chores" data-mandatory="chores" onclick="toggleCard(this)" style="display:none;">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fff7ed;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-tag mandatory">Required</span></div>
+        </div>
+        <div class="card-title">Garbage</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🗑️ Garbage</div><ul><li>Take out the garbage</li><li>4 of 6 chores needed for $5 payout</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="chore-lawn" data-value="0" data-section="chores" data-mandatory="chores" onclick="toggleCard(this)" style="display:none;">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fff7ed;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20V10c4-4 8-4 8 0v10"/><path d="M13 20V8c2-4 6-2 6 2v10"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-tag mandatory">Required</span></div>
+        </div>
+        <div class="card-title">Lawn</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🌿 Lawn</div><ul><li>Mow or maintain the lawn</li><li>4 of 6 chores needed for $5 payout</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="chore-vacuum" data-value="0" data-section="chores" data-mandatory="chores" onclick="toggleCard(this)" style="display:none;">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#fff7ed;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="19" r="2"/><path d="M3 6l3 13h10l2-8H7"/><path d="M7 11h12"/></svg>
+          </div>
+          <div class="card-badges"><span class="card-tag mandatory">Required</span></div>
+        </div>
+        <div class="card-title">Vacuum</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">🧹 Vacuum</div><ul><li>Vacuum the house</li><li>4 of 6 chores needed for $5 payout</li></ul></div>
       </div>
 
     </div>
@@ -1837,6 +1873,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text-1);m
         <div class="card-sub">15 minutes</div>
         <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
         <div class="tooltip"><div class="tooltip-title">🙏 Other Spiritual</div><ul><li>Any approved spiritual activity</li><li>Counts toward 30 min/week requirement</li></ul></div>
+      </div>
+
+      <div class="bingo-card" data-id="spirit-fsy" data-value="0" data-section="spiritual" data-mandatory="spiritual" data-countable="true" onclick="toggleCard(this)" style="display:none;">
+        <div class="card-top">
+          <div class="card-icon-wrap" style="background:#eff4ff;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+        </div>
+        <div class="card-title">FSY</div>
+        <div class="card-sub">15 minutes</div>
+        <div class="done-overlay"><svg class="done-check" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-9"/></svg></div>
+        <div class="tooltip"><div class="tooltip-title">FSY</div><ul><li>For the Strength of Youth activities</li><li>Counts toward 30 min/week spiritual requirement</li></ul></div>
       </div>
 
     </div>
@@ -2110,7 +2158,7 @@ const CARD_DATA = {
   'act-bike':    { title: "Bike Riding", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0-1-1h-3l-3.5 9.5"/><path d="M9.5 14.5L15 6"/><path d="M18.5 14.5L15 6"/></svg>', detail: '<ul><li>Minimum <strong>5 miles</strong></li><li>Must include the <strong>hill back home</strong></li><li>Counts toward $5 physical activity payout</li></ul>' },
   'plyo-lacrosse': { title: "Lacrosse Workout", value: "$5", color: "#16a34a", bg: "#f0fdf4",
     icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l14 9-14 9V3z"/><path d="M19 12H5"/></svg>',
-    detail: '<strong>Dynamic Warm-Up (10 min, 2 rounds):</strong><ul><li>High knees, butt kicks, carioca, lateral shuffle, backpedal, sprint — 20 yards each</li><li>10 walking lunges each leg · 10 bodyweight squats · 10 leg swings each direction</li><li>3×20-yard accelerations at 70%, 80%, 90%</li></ul><strong>Phase 2 — Wall Ball Mastery (15 min):</strong><ul><li>Right Hand: 50 quick sticks · 25 one-handed catches · 25 catch-switch-throw</li><li>Left Hand: 50 quick sticks · 25 one-handed catches · 25 catch-switch-throw</li><li>Mixed: 50 alternating hands · 25 behind-the-back attempts · 25 off-side catches</li></ul><strong>Phase 3 — Ground Ball Circuit (10 min):</strong><ul><li>Round 1: Approach, scoop through, sprint 20 yards — 5 reps</li><li>Round 2: Scoop, roll away, accelerate — 5 reps each side</li><li>Round 3: Scoop, sprint, simulated pass — 10 reps</li></ul><strong>Phase 4 — Shooting on the Run (15 min):</strong><ul><li>Right alley 10 shots · Left alley 10 shots · Sweep dodges 10 shots each</li><li>Change-of-direction dodge: split dodge, re-dodge, shoot — 10 reps</li></ul><strong>Phase 5 — Conditioning Finisher (8 min, 30s on/30s off):</strong><ul><li>Sprint 30 yards and back</li><li>Lateral shuffle 20 yards and back</li><li>Sprint 30 yards and back</li><li>Burpees</li><li>Sprint 30 yards and back</li><li>Ground-ball pickup and sprint</li></ul>' },
+    detail: '<strong>Phase 1 — Dynamic Warm-Up (10 min, 2 rounds):</strong><ul><li>High knees · Butt kicks · Carioca · Lateral shuffle · Backpedal · Sprint — 20 yards each</li><li>10 walking lunges each leg · 10 bodyweight squats · 10 leg swings each direction</li><li>3×20-yard accelerations at 70%, 80%, 90%</li></ul><strong>Phase 2 — Wall Ball Mastery (15 min):</strong><ul><li><em>Right Hand:</em> 50 quick sticks · 25 one-handed catches · 25 catch-switch-throw</li><li><em>Left Hand:</em> 50 quick sticks · 25 one-handed catches · 25 catch-switch-throw</li><li><em>Mixed:</em> 50 alternating hands · 25 behind-the-back · 25 off-side catches</li><li>Goal: No dropped passes</li></ul><strong>Phase 3 — Ground Ball Circuit (10 min):</strong><ul><li>Round 1 (5 reps): Approach → Scoop through → Sprint 20 yards</li><li>Round 2 (5 reps/side): Scoop → Roll away → Accelerate</li><li>Round 3 (10 reps): Scoop → Sprint → Simulated pass</li></ul><strong>Phase 4 — Shooting on the Run (15 min):</strong><ul><li>Right alley 10 shots · Left alley 10 shots · Sweep dodges 10 shots each way</li><li>Change-of-direction dodge (10 reps): Split dodge → Re-dodge → Shoot</li><li>Focus: Hips to target · Hands away from body · Shoot while moving</li></ul><strong>Phase 5 — Conditioning Finisher (8 min, 30s on/30s off, repeat twice):</strong><ul><li>Sprint 30 yards and back</li><li>Lateral shuffle 20 yards and back</li><li>Sprint 30 yards and back</li><li>Burpees</li><li>Sprint 30 yards and back</li><li>Ground-ball pickup and sprint</li></ul><strong>Phase 6 — Lacrosse IQ (5 min):</strong><ul><li>Watch film — focus on defensemen</li><li>Study: Off-ball movement · Slide timing · Dodges · Re-dodges</li></ul>' },
   'act-hike':    { title: "Hike", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 17 9 7 14 13 18 9 21 17"/></svg>', detail: '<ul><li>Minimum <strong>1 mile</strong></li><li>Counts toward $5 physical activity payout</li></ul>' },
   'act-other': { title: "Other", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>', detail: '<ul><li>Any approved physical activity</li><li>Counts toward physical activity payout</li></ul>' },
   'act-soccer-pay': { title: "Soccer", value: "$5", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>', detail: '<ul><li>Minimum <strong>1 hour</strong></li><li>Counts toward physical activity payout</li></ul>' },
@@ -2132,6 +2180,10 @@ const CARD_DATA = {
   'spirit-cfm':       { title: "Come Follow Me", value: "Required", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>', detail: '<ul><li>Study the Come Follow Me curriculum</li><li>Counts toward the 30 min/week spiritual requirement</li></ul>' },
   'spirit-conf':      { title: "Conference Talk", value: "Required", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>', detail: '<ul><li>Watch or read a General Conference talk</li><li>Counts toward the 30 min/week spiritual requirement</li></ul>' },
   'spirit-seminary':  { title: "Seminary Videos", value: "Required", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>', detail: '<ul><li>Watch seminary instructional videos</li><li>Counts toward the 30 min/week spiritual requirement</li></ul>' },
+  'spirit-fsy':       { title: "FSY", value: "Required", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>', detail: '<ul><li>For the Strength of Youth activities</li><li>Counts toward 30 min/week spiritual requirement</li></ul>' },
+  'chore-garbage':  { title: "Garbage",  value: "Required", color: "#d97706", bg: "#fff7ed", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>', detail: '<ul><li>Take out the garbage</li><li>4 of 6 chores needed for $5 payout</li></ul>' },
+  'chore-lawn':     { title: "Lawn",     value: "Required", color: "#d97706", bg: "#fff7ed", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20V10c4-4 8-4 8 0v10"/><path d="M13 20V8c2-4 6-2 6 2v10"/></svg>', detail: '<ul><li>Mow or maintain the lawn</li><li>4 of 6 chores needed for $5 payout</li></ul>' },
+  'chore-vacuum':   { title: "Vacuum",   value: "Required", color: "#d97706", bg: "#fff7ed", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="19" r="2"/><path d="M3 6l3 13h10l2-8H7"/><path d="M7 11h12"/></svg>', detail: '<ul><li>Vacuum the house</li><li>4 of 6 chores needed for $5 payout</li></ul>' },
   'spirit-other':     { title: "Other Spiritual", value: "Required", color: "#2563eb", bg: "#eff4ff", icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', detail: '<ul><li>Any approved spiritual activity</li><li>Counts toward the 30 min/week spiritual requirement</li></ul>' },
 };
 
@@ -2497,6 +2549,43 @@ function applyUserCards(userId) {
     }
   }
 
+  // Show/hide extra chore tiles and manage Required badges for Zander
+  const zanderChoreExtra = ['chore-garbage','chore-lawn','chore-vacuum'];
+  const zanderSpiritExtra = ['spirit-fsy'];
+  const allChoreCardIds = ['chore-clothes','chore-room','chore-bathroom','chore-garbage','chore-lawn','chore-vacuum'];
+  zanderChoreExtra.forEach(id => {
+    const el = document.querySelector(`.bingo-card[data-id="${id}"]`);
+    if (el) el.style.display = isZander ? '' : 'none';
+  });
+  // Remove Required badge from all chore tiles for Zander; restore for others
+  allChoreCardIds.forEach(id => {
+    const card = document.querySelector(`.bingo-card[data-id="${id}"]`);
+    if (!card) return;
+    const badges = card.querySelector('.card-badges');
+    if (!badges) return;
+    if (isZander) {
+      badges.innerHTML = '';
+    } else {
+      if (!badges.querySelector('.card-tag.mandatory')) {
+        badges.innerHTML = '<span class="card-tag mandatory">Required</span>';
+      }
+    }
+  });
+  zanderSpiritExtra.forEach(id => {
+    const el = document.querySelector(`.bingo-card[data-id="${id}"]`);
+    if (el) el.style.display = isZander ? '' : 'none';
+  });
+  // Update chores section rules text for Zander
+  const choresRules = document.getElementById('chores-section-rules');
+  if (choresRules) {
+    choresRules.innerHTML = isZander
+      ? 'Mandatory for any payment &nbsp;·&nbsp; Must complete 4 out of 6 per week for $5 payment'
+      : 'Mandatory for any payment &nbsp;·&nbsp; Must complete all 3 per week for $5 payout';
+  }
+  // Update chores ring label and section rules for Zander (4 of 6 vs 3 of 3)
+  const choresLabel = document.getElementById('ring-chores-label');
+  if (choresLabel) choresLabel.textContent = isZander ? '0/4' : '0/3';
+
   // Hide sprinting section for Brigham
   // Hide lifting and plyometrics sections for Grace
   const isGrace = userId === 'grace';
@@ -2506,8 +2595,8 @@ function applyUserCards(userId) {
   if (sprintSection) sprintSection.style.display = (isBrigham || isGrace) ? 'none' : '';
   if (sprintDivider) sprintDivider.style.display = (isBrigham || isGrace) ? 'none' : '';
 
-  // Hide music section for Zander only
-  const isZanderOrGraham = userId === 'zander';
+  // Hide music section for Zander only - REMOVED, Zander now has music
+  const isZanderOrGraham = false;
   const musicSection = document.getElementById('section-music');
   const musicDivider = document.getElementById('divider-music');
   if (musicSection) musicSection.style.display = isZanderOrGraham ? 'none' : '';
@@ -2598,7 +2687,19 @@ function applyUserCards(userId) {
     // Restore soccer tile — hide for Zander, show for others
     const soccerCard = document.querySelector('.bingo-card[data-id="act-soccer"]');
     if (soccerCard) {
-      soccerCard.style.display = isZander ? 'none' : '';
+      soccerCard.style.display = '';
+      if (isZander) {
+        const titleEl  = soccerCard.querySelector('.card-title');
+        const subEl    = soccerCard.querySelector('.card-sub');
+        const iconWrap = soccerCard.querySelector('.card-icon-wrap');
+        const ttTitle  = soccerCard.querySelector('.tooltip-title');
+        if (titleEl)  titleEl.textContent  = 'Lacrosse Practice';
+        if (subEl)    subEl.textContent    = 'Does not count for pay';
+        if (iconWrap) iconWrap.innerHTML   = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l14 9-14 9V3z"/><path d="M19 12H5"/></svg>';
+        if (ttTitle)  ttTitle.textContent  = '🥍 Lacrosse Practice';
+        CARD_DATA['act-soccer'].title  = 'Lacrosse Practice';
+        CARD_DATA['act-soccer'].detail = '<ul><li>Must attend all lacrosse practices</li><li>Mandatory — does <strong>not</strong> count toward $5 physical activity payout</li></ul>';
+      }
       if (!isZander) {
         const titleEl  = soccerCard.querySelector('.card-title');
         const subEl    = soccerCard.querySelector('.card-sub');
@@ -2642,8 +2743,8 @@ function applyUserCards(userId) {
     }
   }
 
-  // Swap soccer tile for Grace/Graham (skip for Brigham — he has swimming there)
-  if (!isBrigham) {
+  // Swap soccer tile for Grace/Graham (skip for Brigham and Zander — they have their own)
+  if (!isBrigham && !isZander) {
     const soccerCard = document.querySelector('.bingo-card[data-id="act-soccer"]');
     if (soccerCard) {
       const titleEl = soccerCard.querySelector('.card-title');
@@ -2907,7 +3008,11 @@ function updateAll(){
   document.getElementById('dash-payout-bar').style.width = (payoutPct * 100) + '%';
   document.getElementById('dash-payout-pct').textContent = Math.round(payoutPct * 100) + '%';
 
-  const choresMet = !!(state['chore-clothes'] && state['chore-room'] && state['chore-bathroom']);
+  const allChoreIds = ['chore-clothes','chore-room','chore-bathroom','chore-garbage','chore-lawn','chore-vacuum'];
+  const choresDone = allChoreIds.filter(id=>state[id]).length;
+  const choresMet = currentUser === 'zander'
+    ? choresDone >= 4
+    : !!(state['chore-clothes'] && state['chore-room'] && state['chore-bathroom']);
 
   // Service: minimum 1 hour = 4 × 15-min activities (uses counts)
   const servIds=['serv-dishes-clean','serv-dishes-dirty','serv-laundry','serv-yard','serv-ward','serv-other'];
@@ -2915,16 +3020,14 @@ function updateAll(){
   const serviceMet = serviceDone >= 4;
 
   // Spiritual: minimum 30 min = 2 × 15-min activities (uses counts)
-  const spiritIds=['spirit-scripture','spirit-mission','spirit-cfm','spirit-conf','spirit-seminary','spirit-other'];
+  const spiritIds=['spirit-scripture','spirit-mission','spirit-cfm','spirit-conf','spirit-seminary','spirit-other','spirit-fsy'];
   const spiritualDone = spiritIds.reduce((sum, id) => sum + (state[id + '_count'] || 0), 0);
   const spiritualMet = spiritualDone >= 2;
 
-  const musicMet = (currentUser === 'zander')
-    ? true  // music not required for Zander
-    : ['music-1','music-2','music-3','music-4'].filter(id=>state[id]).length >= 4;
+  const musicMet = ['music-1','music-2','music-3','music-4'].filter(id=>state[id]).length >= 4;
 
-  const reqTotal = (currentUser === 'zander') ? 3 : 4;
-  const metCount = [choresMet, serviceMet, spiritualMet, musicMet].filter(Boolean).length - (musicMet && (currentUser === 'zander') ? 1 : 0);
+  const reqTotal = 4;
+  const metCount = [choresMet, serviceMet, spiritualMet, musicMet].filter(Boolean).length;
   const reqPct = metCount / reqTotal;
   document.getElementById('ring-required').setAttribute('stroke-dasharray', `${reqPct * circumference} ${circumference}`);
   document.getElementById('dash-req-val').textContent = Math.round(reqPct * 100) + '%';
@@ -2948,8 +3051,8 @@ function updateAll(){
   }
   const musicDoneCount = ['music-1','music-2','music-3','music-4'].filter(id=>state[id]).length;
   setRing('ring-music', musicDoneCount, 4);
-  const choresDone = ['chore-clothes','chore-room','chore-bathroom'].filter(id=>state[id]).length;
-  setRing('ring-chores', choresDone, 3);
+  const choreMax = currentUser === 'zander' ? 4 : 3;
+  setRing('ring-chores', Math.min(choresDone, choreMax), choreMax);
   setRing('ring-service', serviceDone, 4);
   setRing('ring-spiritual', spiritualDone, 2);
 }
